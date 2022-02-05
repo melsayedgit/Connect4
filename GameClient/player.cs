@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +10,21 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class Form1 : Form
+    public partial class player : UserControl
     {
-        public Form1()
+        public player()
         {
             InitializeComponent();
         }
 
-        private void Label1_Click(object sender, EventArgs e)
-        {
 
+        private string _playername;
+
+
+        public string playername
+        {
+            get { return _playername; }
+            set { _playername = value; label1.Text = value; }
         }
     }
 }
