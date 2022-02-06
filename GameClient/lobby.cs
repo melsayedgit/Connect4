@@ -142,6 +142,14 @@ namespace Client
         {
             showplayer();
         }
-        // end code of dragable form
+
+        private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            Application.Exit();
+
+
     }
+    // end code of dragable form
+}
 }

@@ -56,15 +56,30 @@ namespace Client
             {
                 if (textBox1.Text == "")
                 {
-
+                    MessageBox.Show("you need to Enter a user Name to login");
                 }
                 else
                 {
                     playername = textBox1.Text;
-                    start_lobby = new lobby();
-                    start_lobby.Show();
-                    this.Hide();
+
+
+                    try
+                    {
+                        GameManger.Login(playername);
+
+                        start_lobby = new lobby();
+                        start_lobby.Show();
+                        this.Hide();
+
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("The Server is Offline please try again later");
+
+                    }
+
                 }
+
 
             }
         }

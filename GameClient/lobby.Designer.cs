@@ -182,6 +182,7 @@
             this.Name = "lobby";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Lobby_FormClosing);
             this.Load += new System.EventHandler(this.Lobby_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Lobby_MouseDown);
             this.panel1.ResumeLayout(false);
