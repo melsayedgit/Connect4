@@ -21,21 +21,69 @@ namespace Client
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            playername = textBox1.Text;
-            start_lobby = new lobby();
-            start_lobby.Show();
-            this.Hide();
-        }
+            if (textBox1.Text=="")
+            {
 
-        private void TextBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
+            }
+            else
             {
                 playername = textBox1.Text;
                 start_lobby = new lobby();
                 start_lobby.Show();
                 this.Hide();
             }
+
+            
         }
+
+        private void TextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (textBox1.Text == "")
+                {
+
+                }
+                else
+                {
+                    playername = textBox1.Text;
+                    start_lobby = new lobby();
+                    start_lobby.Show();
+                    this.Hide();
+                }
+
+            }
+        }
+
+
+
+
+        //drag the borderless form 
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        private void Login_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void Panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+        // end code of dragable form
     }
 }
