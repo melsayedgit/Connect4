@@ -20,6 +20,11 @@ namespace Client
             InitializeComponent();
            
         }
+        ~lobby()
+        {
+           
+            (this.Parent as login).Close();
+        }
         private void Lobby_Load(object sender, EventArgs e)
         {
             showplayer();
@@ -28,11 +33,12 @@ namespace Client
 
         public void showplayer()
         {
-            player[] playerlist = new player[20];
+            flowLayoutPanel1.Controls.Clear();
+            player[] playerlist = new player[GameManger.playerslist.Count];
             for (int i = 0; i < playerlist.Length; i++)
             {
                 playerlist[i] = new player();
-                playerlist[i].playername = "PlayerName";
+                playerlist[i].playername = GameManger.playerslist[i].Name;
                 flowLayoutPanel1.Controls.Add(playerlist[i]);
          
                 //if (flowLayoutPanel1.Controls.Count>0)
@@ -47,7 +53,9 @@ namespace Client
 
         public void showroom()
         {
-            RoomControl[] roomlist = new RoomControl[10];
+          
+
+           RoomControl[] roomlist = new RoomControl[10];
             for (int i = 0; i < roomlist.Length; i++)
             {
                 roomlist[i] = new RoomControl();
@@ -128,6 +136,11 @@ namespace Client
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            showplayer();
         }
         // end code of dragable form
     }

@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Client
 {
@@ -28,7 +29,7 @@ namespace Client
       static  NetworkStream ConnectionStream;
       static  BinaryReader br;
       static  BinaryWriter bwr;
-      static  Thread updatingThread;
+      static Task recieve;
 
      public static List<Player> playerslist;
      public static List<Room> Rommslist;
@@ -39,12 +40,15 @@ namespace Client
         static GameManger()
            
         {
-            ip = "127,0,0,1";
-            port = 1997;
+            ip = "127.0.0.1";
+            port = 2222;
             connStatues = false;
             ServerIP =  IPAddress.Parse(ip);
-           
-        }
+
+          playerslist = new List<Player>();
+          Rommslist = new List<Room>();
+
+    }
 
         /// <summary>
         ///  Connect the user to the server and return and return The result of the attempt 
@@ -65,13 +69,20 @@ namespace Client
 
                 isconnected = true;
                 connStatues = true;
+                
                 SendServerRequest(Flag.sendLoginInfo,userName);
                 UserName = userName;
+                recieve = new Task(ReceiveServerRequest);
+                recieve.Start();
+                SendServerRequest(Flag.getPlayers);
+
+
             }
             catch (Exception e)
             {
+               
                 connStatues = isconnected;
-
+                throw e;
             }
 
             return isconnected;
@@ -84,9 +95,9 @@ namespace Client
         /// </summary>
         public static void SendServerRequest(Flag flag,params string[] data)
         {
-            var f = (int)Flag.getPlayers;
+            var f = (int)flag;
             string msg = f.ToString();
-            
+           
 
             if (data.Length >0)
             {
@@ -98,6 +109,7 @@ namespace Client
 
 
             }
+           
             bwr.Write(msg);
 
         }
@@ -128,7 +140,8 @@ namespace Client
                 default:
                     break;
             }
-
+            MessageBox.Show(msg);
+            ReceiveServerRequest();
 
         }
 
@@ -142,7 +155,8 @@ namespace Client
 
             foreach (var item in data)
             {
-                players.Add(new Player(item));
+                var name = item.Split('+')[0];
+                players.Add(new Player(name));
             }
             return players;
         }
