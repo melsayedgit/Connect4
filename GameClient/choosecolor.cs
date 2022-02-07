@@ -59,7 +59,7 @@ namespace Client
 
         private void Button1_Click(object sender, EventArgs e)
         {
-             GameManger.player2_color = selected_color;
+            GameManger.UpdatePlayer(selected_color);
             ///  code of start the gameeeeee (open game board ) player2 joined with selected color
         }
 

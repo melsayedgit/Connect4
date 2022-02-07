@@ -18,6 +18,10 @@ namespace Client
         public spectate join_spectate;
         public createRoom create_room;
         public RoomControl prev_select;
+        //create room data 
+        public string Roomname_new;
+        public int board_hight;
+        public int board_width;
         public lobby() 
         {
             InitializeComponent();
@@ -142,7 +146,17 @@ namespace Client
         private void Button2_Click(object sender, EventArgs e)
         {
             create_room = new createRoom();
-            create_room.Show(); 
+            var dg = create_room.ShowDialog();
+            
+            if (dg ==DialogResult.OK)
+            {
+
+                Roomname_new = create_room.Roomname_new;
+                board_hight= create_room.board_hight;
+                board_width = create_room.board_width;
+
+            }
+            
 
         }
 

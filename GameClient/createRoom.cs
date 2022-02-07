@@ -65,16 +65,18 @@ namespace Client
                 Roomname_new = textBox1.Text;
                 board_hight = int.Parse(comboBox1.Text);
                 board_width = int.Parse(comboBox2.Text);
-                GameManger.player1_color = Selected_color1;
+                GameManger.UpdatePlayer(Selected_color1);
+                this.DialogResult = DialogResult.OK;
 
             }
+           
     
         }
 
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         //drag the borderless form 
