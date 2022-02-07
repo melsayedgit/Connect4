@@ -16,6 +16,7 @@ namespace Client
     {
         public choosecolor join_game;
         public spectate join_spectate;
+        public createRoom create_room;
         public RoomControl prev_select;
         public lobby() 
         {
@@ -136,6 +137,15 @@ namespace Client
             
 
         }
+
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            create_room = new createRoom();
+            create_room.Show(); 
+
+        }
+
 
 
 

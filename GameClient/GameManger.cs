@@ -24,6 +24,7 @@ namespace Client
         static bool connStatues;
         static string UserName;
 
+
       static  IPAddress ServerIP;
       static  TcpClient server;
       static  NetworkStream ConnectionStream;
@@ -36,6 +37,9 @@ namespace Client
 
      public static Player CurrentPlayer;
      public static Room CurrentRoom;
+     public static Color player1_color;
+     public static Color player2_color;
+     
 
         static GameManger()
            

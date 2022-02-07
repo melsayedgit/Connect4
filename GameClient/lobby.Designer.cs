@@ -48,12 +48,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Trebuchet MS", 22.2F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Stencil", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(26)))), ((int)(((byte)(74)))));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label1.Location = new System.Drawing.Point(105, 35);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(202, 49);
+            this.label1.Size = new System.Drawing.Size(237, 46);
             this.label1.TabIndex = 1;
             this.label1.Text = "Connect 4 ";
             // 
@@ -132,6 +132,7 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "Create Room";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             this.button2.MouseEnter += new System.EventHandler(this.Button2_MouseEnter);
             this.button2.MouseLeave += new System.EventHandler(this.Button2_MouseLeave);
             // 
