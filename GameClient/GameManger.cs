@@ -140,7 +140,7 @@ namespace Client
                 default:
                     break;
             }
-           // MessageBox.Show(msg);
+            MessageBox.Show(msg);
             ReceiveServerRequest();
 
         }
