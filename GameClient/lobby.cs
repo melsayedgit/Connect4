@@ -14,6 +14,8 @@ namespace Client
 {
     public partial class lobby : Form
     {
+        public choosecolor join_game;
+        public spectate join_spectate;
         public RoomControl prev_select;
         public lobby() 
         {
@@ -108,6 +110,33 @@ namespace Client
 
         }
 
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            showplayer();
+        }
+
+        private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            if (true) //no room selected
+            {
+                join_spectate = new spectate();
+                join_spectate.Show();
+            }
+            else
+            {
+                join_game= new choosecolor();
+                join_game.Show();
+
+            }
+
+            
+
+        }
+
 
 
 
@@ -138,18 +167,8 @@ namespace Client
             }
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            showplayer();
-        }
-
-        private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-            Application.Exit();
 
 
+        // end code of dragable form
     }
-    // end code of dragable form
-}
 }
