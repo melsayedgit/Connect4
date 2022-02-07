@@ -24,6 +24,7 @@ namespace Client
         static bool connStatues;
         static string UserName;
 
+
       static  IPAddress ServerIP;
       static  TcpClient server;
       static  NetworkStream ConnectionStream;
@@ -36,6 +37,8 @@ namespace Client
 
      public static Player CurrentPlayer;
      public static Room CurrentRoom;
+    
+     
 
         static GameManger()
            
@@ -177,11 +180,11 @@ namespace Client
         ///  Update the current Player INFO
         /// </summary>
 
-        public static void UpdatePlayer(string colorName)
+        public static void UpdatePlayer(Color colorName)
         {
             var currPlayer= new Player(UserName);
 
-            currPlayer.PlayerColor = Color.FromName(colorName);
+            currPlayer.PlayerColor = colorName;
 
             CurrentPlayer = currPlayer;
         }
