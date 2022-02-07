@@ -60,13 +60,13 @@ namespace Client
 
         public void showroom()
         {
-          
+            flowLayoutPanel2.Controls.Clear();
 
-           RoomControl[] roomlist = new RoomControl[10];
+            RoomControl[] roomlist = new RoomControl[GameManger.Rommslist.Count];
             for (int i = 0; i < roomlist.Length; i++)
             {
                 roomlist[i] = new RoomControl();
-                roomlist[i].roomname = "Room Name"+i;
+                roomlist[i].roomname = GameManger.Rommslist[i].Name;
                 flowLayoutPanel2.Controls.Add(roomlist[i]);
 
 
@@ -118,6 +118,7 @@ namespace Client
         private void Timer1_Tick(object sender, EventArgs e)
         {
             showplayer();
+            showroom();
         }
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
@@ -152,8 +153,13 @@ namespace Client
             {
 
                 Roomname_new = create_room.Roomname_new;
-                board_hight= create_room.board_hight;
                 board_width = create_room.board_width;
+                board_hight = create_room.board_hight;
+           
+                GameManger.SendServerRequest(Flag.createRoom,
+                    GameManger.CurrentPlayer.Name+GameManger.CurrentPlayer.PlayerColor.ToString(),
+                     Roomname_new, board_width.ToString() + board_hight.ToString()
+                    );
 
             }
             
