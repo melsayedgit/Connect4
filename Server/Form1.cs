@@ -243,6 +243,11 @@ namespace serverAppConnect4
                 askingPlayer.bw.Write("405,0");
                 //remove this player from the room
                 currentRoom.roomPlayers.RemoveAt(1);
+                //remove all audience
+                for(int i = 2; i <currentRoom.roomPlayers.Count; i++)
+                {
+                    currentRoom.roomPlayers.RemoveAt(i);
+                }
             }
 
 
@@ -324,6 +329,77 @@ namespace serverAppConnect4
             bool isWinner = false;
             return isWinner;
         }
+
+        //play again after one has win or lose
+        public static void playAgain(player moveSender, int playAgain)
+        {
+            //600,1 sending player wants to play again
+            room currentRoom = moveSender.myRoom;
+            //int winnerIndex = currentRoom.roomPlayers.IndexOf(winner);
+            if (currentRoom.gameEnded == 0)//the other player havn't responded yet
+            {
+                //check the response of the move sender
+                currentRoom.gameEnded++;
+                if (playAgain == 1)
+                {
+                    moveSender.playAgain = true;
+                }
+            }
+            else //the other player has already sent the response
+            {
+                if (playAgain == 1)
+                {
+                    moveSender.playAgain = true;
+                }
+                if (currentRoom.roomPlayers[0].name == moveSender.name)//the move sender is the room owner
+                {
+                    player guestPlayer = currentRoom.roomPlayers[1];
+                    if (moveSender.playAgain)//the room owner wants to play again
+                    {
+                        //check the guest
+                        if (guestPlayer.playAgain)//the guest wants to play also
+                        {
+                            waitToPlay(moveSender, 1);
+                        }
+                        else//the guest doesn't want to play so kick him out
+                        {
+                            waitToPlay(moveSender, 0);
+                        }
+                    }
+                    else//the room owner doesn't want to play again
+                    {
+                        waitToPlay(moveSender, 0);
+                    }
+
+                }
+                else //the second responder is the guest
+                {
+                    player roomOwner = currentRoom.roomPlayers[0];
+                    if (moveSender.playAgain)//the guest wants to play again
+                    {
+                        //check the guest
+                        if (roomOwner.playAgain)//the room owner wants to play also
+                        {
+                            waitToPlay(moveSender, 1);
+                        }
+                        else//the room owner doesn't want to play so kick the guest out
+                        {
+                            waitToPlay(moveSender, 0);
+                        }
+                    }
+                    else
+                    {
+                        waitToPlay(moveSender, 0);
+                    }
+                }
+                //restore the default settings
+                currentRoom.gameEnded = 0;
+                currentRoom.roomPlayers[0].playAgain = false;
+                currentRoom.roomPlayers[1].playAgain = false;
+                currentRoom.board = new int[currentRoom.rows, currentRoom.cols];
+            }
+        }
+
     }
     public class player
     {
@@ -335,6 +411,7 @@ namespace serverAppConnect4
         public bool isPlaying = false;
         public room myRoom = null;
         public string color;
+        public bool playAgain = false;
 
         public void playerHandling()
         {
@@ -412,9 +489,8 @@ namespace serverAppConnect4
                         Server.sendMove(this, int.Parse(arr[1]), int.Parse(arr[2]));
                         break;
                     case "600":
-                        //Server.playAgain(this)
-                        break;
-                    case "1000":
+                        int playAgain = int.Parse( arr[1]);
+                        Server.playAgain(this, playAgain);
                         break;
                 }
                 
@@ -443,6 +519,7 @@ namespace serverAppConnect4
         public int rows; 
         public int cols;
         public int[,] board;
+        public int gameEnded = 0;
 
         public BinaryReader br;
         public BinaryWriter bw;
