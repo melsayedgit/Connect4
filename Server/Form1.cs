@@ -413,8 +413,8 @@ namespace serverAppConnect4
                         break;
                     case "600":
                         //Server.playAgain(this)
-
-
+                        break;
+                    case "1000":
                         break;
                 }
                 
