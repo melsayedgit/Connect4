@@ -23,10 +23,6 @@ namespace serverAppConnect4
         TcpListener server;
         Socket connection;
 
-        //players in lobby counter
-        static int counter = 0;
-
-
         //players and rooms list
         static List<player> Allplayers = new List<player>();
         static List<room> allRooms = new List<room>();
@@ -45,7 +41,9 @@ namespace serverAppConnect4
             //waitToPlay = 405,
             SendMove = 410,
             updateBoard = 420,
-            gameEnded = 500
+            gameEnded = 500,
+
+            disconnectPlayer = 700
         }
         #endregion
 
@@ -73,16 +71,18 @@ namespace serverAppConnect4
                 connection = server.AcceptSocket();
                 //create new player
                 player tempPlayer = new player();
-                
-
 
                 //assign the player member variables for stream
                 tempPlayer.Nstream = new NetworkStream(connection);
                 tempPlayer.Br = new BinaryReader(tempPlayer.Nstream);
                 tempPlayer.Bw = new BinaryWriter(tempPlayer.Nstream);
 
+                //assigning the cancellation token
+                tempPlayer.ct = tempPlayer.tokenSource.Token;
+                
+
                 //launch the thread of the new player
-                tempPlayer.PlayerThread = new Task(tempPlayer.playerHandling);
+                tempPlayer.PlayerThread = new Task(tempPlayer.playerHandling, tempPlayer.tokenSource.Token);
                 tempPlayer.PlayerThread.Start();
 
 
@@ -127,12 +127,20 @@ namespace serverAppConnect4
         public void UpdateList()
         {
             roomList.Items.Clear();
-            foreach (room r in allRooms)
+            for(int i=0; i< allRooms.Count; i++)
             {
-                roomList.Items.Add(r.RoomName);
-                foreach (player p in r.RoomPlayers)
+                //if there are players in the room
+                if (allRooms[i].RoomPlayers.Count != 0)
                 {
-                    roomList.Items.Add("    " + p.Name);
+                    roomList.Items.Add(allRooms[i].RoomName);
+                    foreach (player p in allRooms[i].RoomPlayers)
+                    {
+                        roomList.Items.Add("    " + p.Name);
+                    }
+                }
+                else
+                {
+                    roomList.Items.Remove(allRooms[i]);
                 }
             }
             playerList.Items.Clear();
@@ -243,8 +251,10 @@ namespace serverAppConnect4
                 askingPlayer.Bw.Write("405,0");
                 //remove this player from the room
                 currentRoom.RoomPlayers.RemoveAt(1);
+                //remove the room refrence from the player
+                askingPlayer.MyRoom = null;
                 //remove all audience
-                for(int i = 2; i <currentRoom.RoomPlayers.Count; i++)
+                for (int i = 2; i <currentRoom.RoomPlayers.Count; i++)
                 {
                     currentRoom.RoomPlayers.RemoveAt(i);
                 }
@@ -400,6 +410,20 @@ namespace serverAppConnect4
             }
         }
 
+        internal static void disconnectPlayer(player player)
+        {
+            room playerRoom = player.MyRoom;
+            //close all the player's streams, writer and reader
+            player.Br.Close();
+            player.Bw.Close();
+            player.Nstream.Close();
+            //dispose the player's thread
+            player.tokenSource.Cancel();
+            //player.PlayerThread.Dispose();
+            //remove the player from the players list 
+            Allplayers.Remove(player);
+            playerRoom.RoomPlayers.Remove(player);
+        }
     }
     public class player
     {
@@ -415,6 +439,11 @@ namespace serverAppConnect4
         //player specific task to handle each player requests
         Task playerThread;
 
+        //assign a cancellation token for the task
+        public CancellationTokenSource tokenSource = new CancellationTokenSource();
+        public CancellationToken ct; //this.tokenSource.Token;
+
+
         //class getters and setters
         public string Name { get { return name; } set { name = value; } }
         public string Color { get { return color; } set { color = value; } }
@@ -426,10 +455,16 @@ namespace serverAppConnect4
         public BinaryWriter Bw { get { return bw; } set { bw = value; } }
         public Task PlayerThread { get { return playerThread; } set { playerThread = value; } }
 
+
+
         public void playerHandling()
         {
+            if (ct.IsCancellationRequested)
+            {
+                MessageBox.Show("canceled");
+            }
             //MessageBox.Show("player handling thread entered");
-            while (true)
+            while (true && !ct.IsCancellationRequested)
             {
                 string clientRequest = this.br.ReadString();
                 //parsing the incoming request
@@ -504,6 +539,9 @@ namespace serverAppConnect4
                     case "600":
                         int playAgain = int.Parse( arr[1]);
                         Server.playAgain(this, playAgain);
+                        break;
+                    case "700":
+                        Server.disconnectPlayer(this);
                         break;
                 }
                 
