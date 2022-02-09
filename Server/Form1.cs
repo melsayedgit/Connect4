@@ -77,48 +77,48 @@ namespace serverAppConnect4
 
 
                 //assign the player member variables for stream
-                tempPlayer.nstream = new NetworkStream(connection);
-                tempPlayer.br = new BinaryReader(tempPlayer.nstream);
-                tempPlayer.bw = new BinaryWriter(tempPlayer.nstream);
+                tempPlayer.Nstream = new NetworkStream(connection);
+                tempPlayer.Br = new BinaryReader(tempPlayer.Nstream);
+                tempPlayer.Bw = new BinaryWriter(tempPlayer.Nstream);
 
                 //launch the thread of the new player
-                tempPlayer.playerThread = new Task(tempPlayer.playerHandling);
-                tempPlayer.playerThread.Start();
+                tempPlayer.PlayerThread = new Task(tempPlayer.playerHandling);
+                tempPlayer.PlayerThread.Start();
 
 
             }
         }
 
-        //login name request
+        //login Name request
         public static void checkName(player tempPlayer, string requestedName)
         {
             bool exists = false;
             foreach (player p in Allplayers)
             {
-                if(p.name == requestedName)
+                if(p.Name == requestedName)
                 {
                     exists = true;
                 }
             }
             if (!exists)
             {
-                tempPlayer.name = requestedName;
+                tempPlayer.Name = requestedName;
                 //adding the player to the players list
                 Allplayers.Add(tempPlayer);
-                tempPlayer.bw.Write("100,1");
+                tempPlayer.Bw.Write("100,1");
             }
             else
             {
-                tempPlayer.bw.Write("100,0");
+                tempPlayer.Bw.Write("100,0");
             }
         }
 
         //create a room request
-        public static void createRoom(player roomOwner, string color)
+        public static void createRoom(player roomOwner, string Color)
         {
             room tempRoom = new room(roomOwner, 6, 6);
-            roomOwner.myRoom = tempRoom;
-            roomOwner.color = color;
+            roomOwner.MyRoom = tempRoom;
+            roomOwner.Color = Color;
             allRooms.Add(tempRoom);
             //updatelist(); //can't call it here as it needs to be static and when its static the roomlist control can't be accessed
         }
@@ -129,16 +129,16 @@ namespace serverAppConnect4
             roomList.Items.Clear();
             foreach (room r in allRooms)
             {
-                roomList.Items.Add(r.roomName);
-                foreach (player p in r.roomPlayers)
+                roomList.Items.Add(r.RoomName);
+                foreach (player p in r.RoomPlayers)
                 {
-                    roomList.Items.Add("    " + p.name);
+                    roomList.Items.Add("    " + p.Name);
                 }
             }
             playerList.Items.Clear();
             foreach (player p in Allplayers)
             {
-                playerList.Items.Add(p.name + " entered");
+                playerList.Items.Add(p.Name + " entered");
             }
         }
         private void timer1_Tick(object sender, EventArgs e)
@@ -147,14 +147,14 @@ namespace serverAppConnect4
         }
 
         //joining the room
-        public static int joinRoom(player askingPlayer, int roomID)
+        public static int joinRoom(player askingPlayer, int RoomID)
         {
             int retVal = -1;
             room requestedRoom = null;
             bool isFound = false;
             for (var i = 0; i < allRooms.Count && !isFound; i++)
             {
-                if (allRooms[i].roomID == roomID)
+                if (allRooms[i].RoomID == RoomID)
                 {
                     requestedRoom = allRooms[i];
                     isFound = true;
@@ -164,23 +164,23 @@ namespace serverAppConnect4
             if (isFound == true)
             {
                 //check if the player is gonna be playing or watching
-                if (requestedRoom.roomPlayers.Count == 1)
+                if (requestedRoom.RoomPlayers.Count == 1)
                 {
                     //the player will play
-                    askingPlayer.isPlaying = true;
-                    requestedRoom.roomPlayers.Add(askingPlayer);
-                    requestedRoom.roomPlayers[0].bw.Write(askingPlayer.name + " has joined");
+                    askingPlayer.IsPlaying = true;
+                    requestedRoom.RoomPlayers.Add(askingPlayer);
+                    requestedRoom.RoomPlayers[0].Bw.Write(askingPlayer.Name + " has joined");
                     //requestedRoom.roomThread = new Task(requestedRoom.roomHandling);
                     //requestedRoom.roomThread.Start();
-                    askingPlayer.myRoom = requestedRoom;
+                    askingPlayer.MyRoom = requestedRoom;
                     retVal = 1;
                 }
                 else
                 {
                     //the player will join as a spectator
-                    requestedRoom.roomPlayers.Add(askingPlayer);
+                    requestedRoom.RoomPlayers.Add(askingPlayer);
                     //LOOOP ON ARRAY AND SEND IT [0,0,0,1],[0,0,1,0]
-                    ///askingPlayer.bw.Write(requestedRoom.board.ToString());
+                    ///askingPlayer.Bw.Write(requestedRoom.Board.ToString());
                     retVal = 2;
                 }
             }
@@ -194,7 +194,7 @@ namespace serverAppConnect4
             string lobbyinfo = "210";
             foreach (player p in Allplayers)
             {
-                lobbyinfo += "," + p.name + "+" + p.isPlaying;
+                lobbyinfo += "," + p.Name + "+" + p.IsPlaying;
             }
             return lobbyinfo;
         }
@@ -205,48 +205,48 @@ namespace serverAppConnect4
             string roomsData = "220";
             foreach (room r in allRooms)
             {
-                roomsData += "," + r.roomID + "+" + r.roomName;
-                foreach (player p in r.roomPlayers)
+                roomsData += "," + r.RoomID + "+" + r.RoomName;
+                foreach (player p in r.RoomPlayers)
                 {
-                    roomsData += "+" + p.name + "-" + p.isPlaying + "-" + p.color;
+                    roomsData += "+" + p.Name + "-" + p.IsPlaying + "-" + p.Color;
                 }
             }
             return roomsData;
         }
 
         //ask to play
-        public static void askToPlay(player askingPlayer, string color)
+        public static void askToPlay(player askingPlayer, string Color)
         {
-            room currentRoom = askingPlayer.myRoom;
-            player roomOwner = currentRoom.roomPlayers[0];
-            askingPlayer.color = color;
-            string askingstr = "400," + askingPlayer.name + "+" + askingPlayer.color;
-            roomOwner.bw.Write(askingstr);
-            //askingPlayer.name = "asking to play";
+            room currentRoom = askingPlayer.MyRoom;
+            player roomOwner = currentRoom.RoomPlayers[0];
+            askingPlayer.Color = Color;
+            string askingstr = "400," + askingPlayer.Name + "+" + askingPlayer.Color;
+            roomOwner.Bw.Write(askingstr);
+            //askingPlayer.Name = "asking to play";
             MessageBox.Show(roomOwner+ ": " + askingstr);
         }
      
         public static int waitToPlay(player roomOwner, int response)
         {
-            room currentRoom = roomOwner.myRoom;
-            player askingPlayer = currentRoom.roomPlayers[1];
+            room currentRoom = roomOwner.MyRoom;
+            player askingPlayer = currentRoom.RoomPlayers[1];
             int retVal = -1;
 
             if (response == 1)
             {
                 //if the room owner accepted
-                askingPlayer.bw.Write("405,1");
+                askingPlayer.Bw.Write("405,1");
                 retVal = 1;
             }else
             {
                 //the room owner refused 
-                askingPlayer.bw.Write("405,0");
+                askingPlayer.Bw.Write("405,0");
                 //remove this player from the room
-                currentRoom.roomPlayers.RemoveAt(1);
+                currentRoom.RoomPlayers.RemoveAt(1);
                 //remove all audience
-                for(int i = 2; i <currentRoom.roomPlayers.Count; i++)
+                for(int i = 2; i <currentRoom.RoomPlayers.Count; i++)
                 {
-                    currentRoom.roomPlayers.RemoveAt(i);
+                    currentRoom.RoomPlayers.RemoveAt(i);
                 }
             }
 
@@ -254,69 +254,69 @@ namespace serverAppConnect4
             return retVal;
         }
 
-        //update board
+        //update Board
         public static void updateBoared(room currentRoom)
         {
             string updateStr = "";
-            for (int row = 0; row < currentRoom.rows; row++)
+            for (int row = 0; row < currentRoom.Rows; row++)
             {
                 updateStr += "[";
-                for (int col = 0; col < currentRoom.cols; col++)
+                for (int col = 0; col < currentRoom.Cols; col++)
                 {
-                    if(col < currentRoom.cols - 1)
-                        updateStr += currentRoom.board[row, col] + ",";
+                    if(col < currentRoom.Cols - 1)
+                        updateStr += currentRoom.Board[row, col] + ",";
                     else
-                        updateStr += currentRoom.board[row, col] ;
+                        updateStr += currentRoom.Board[row, col] ;
                 }
-                if(row < currentRoom.rows -1)
+                if(row < currentRoom.Rows -1)
                     updateStr += "],";
                 else
                     updateStr += "]";
             }
-            foreach (player p in currentRoom.roomPlayers)
+            foreach (player p in currentRoom.RoomPlayers)
             {
-                p.bw.Write(updateStr);
+                p.Bw.Write(updateStr);
             }
             MessageBox.Show("boared updated!\n" + updateStr);
         }
         //End game
         public static void endGame(player winner)
         {
-            room currentRoom = winner.myRoom;
-            int winnerIndex = currentRoom.roomPlayers.IndexOf(winner);
+            room currentRoom = winner.MyRoom;
+            int winnerIndex = currentRoom.RoomPlayers.IndexOf(winner);
             player loser;
             //assigning the loser player
             if (winnerIndex == 0)
             {
-                loser = currentRoom.roomPlayers[1];
+                loser = currentRoom.RoomPlayers[1];
             }
             else
             {
-                loser = currentRoom.roomPlayers[0];
+                loser = currentRoom.RoomPlayers[0];
             }
             //sending the end game response 
-            for (var i =0; i < currentRoom.roomPlayers.Count; i++)
+            for (var i =0; i < currentRoom.RoomPlayers.Count; i++)
             {
-                player currentPlayer = currentRoom.roomPlayers[i];
-                if(currentPlayer.name == winner.name)
+                player currentPlayer = currentRoom.RoomPlayers[i];
+                if(currentPlayer.Name == winner.Name)
                 {
-                    winner.bw.Write("500,1");
+                    winner.Bw.Write("500,1");
                 }
-                else if(currentPlayer.name == loser.name)
+                else if(currentPlayer.Name == loser.Name)
                 {
-                    winner.bw.Write("500,0");
+                    winner.Bw.Write("500,0");
                 }
                 else
                 {
-                    winner.bw.Write("500,-1");
+                    winner.Bw.Write("500,-1");
                 }
             }
         }
         //send move
         public static void sendMove(player moveSender, int x, int y)
         {
-            room currentRoom = moveSender.myRoom;
-            currentRoom.board[x, y] = 1;
+            room currentRoom = moveSender.MyRoom;
+            currentRoom.Board[x, y] = 1;
             updateBoared(currentRoom);
             bool isWinner = checkWinner(moveSender);
             if (isWinner)
@@ -331,33 +331,33 @@ namespace serverAppConnect4
         }
 
         //play again after one has win or lose
-        public static void playAgain(player moveSender, int playAgain)
+        public static void playAgain(player moveSender, int PlayAgain)
         {
             //600,1 sending player wants to play again
-            room currentRoom = moveSender.myRoom;
-            //int winnerIndex = currentRoom.roomPlayers.IndexOf(winner);
-            if (currentRoom.gameEnded == 0)//the other player havn't responded yet
+            room currentRoom = moveSender.MyRoom;
+            //int winnerIndex = currentRoom.RoomPlayers.IndexOf(winner);
+            if (currentRoom.GameEnded == 0)//the other player havn't responded yet
             {
                 //check the response of the move sender
-                currentRoom.gameEnded++;
-                if (playAgain == 1)
+                currentRoom.GameEnded++;
+                if (PlayAgain == 1)
                 {
-                    moveSender.playAgain = true;
+                    moveSender.PlayAgain = true;
                 }
             }
             else //the other player has already sent the response
             {
-                if (playAgain == 1)
+                if (PlayAgain == 1)
                 {
-                    moveSender.playAgain = true;
+                    moveSender.PlayAgain = true;
                 }
-                if (currentRoom.roomPlayers[0].name == moveSender.name)//the move sender is the room owner
+                if (currentRoom.RoomPlayers[0].Name == moveSender.Name)//the move sender is the room owner
                 {
-                    player guestPlayer = currentRoom.roomPlayers[1];
-                    if (moveSender.playAgain)//the room owner wants to play again
+                    player guestPlayer = currentRoom.RoomPlayers[1];
+                    if (moveSender.PlayAgain)//the room owner wants to play again
                     {
                         //check the guest
-                        if (guestPlayer.playAgain)//the guest wants to play also
+                        if (guestPlayer.PlayAgain)//the guest wants to play also
                         {
                             waitToPlay(moveSender, 1);
                         }
@@ -374,11 +374,11 @@ namespace serverAppConnect4
                 }
                 else //the second responder is the guest
                 {
-                    player roomOwner = currentRoom.roomPlayers[0];
-                    if (moveSender.playAgain)//the guest wants to play again
+                    player roomOwner = currentRoom.RoomPlayers[0];
+                    if (moveSender.PlayAgain)//the guest wants to play again
                     {
                         //check the guest
-                        if (roomOwner.playAgain)//the room owner wants to play also
+                        if (roomOwner.PlayAgain)//the room owner wants to play also
                         {
                             waitToPlay(moveSender, 1);
                         }
@@ -393,25 +393,38 @@ namespace serverAppConnect4
                     }
                 }
                 //restore the default settings
-                currentRoom.gameEnded = 0;
-                currentRoom.roomPlayers[0].playAgain = false;
-                currentRoom.roomPlayers[1].playAgain = false;
-                currentRoom.board = new int[currentRoom.rows, currentRoom.cols];
+                currentRoom.GameEnded = 0;
+                currentRoom.RoomPlayers[0].PlayAgain = false;
+                currentRoom.RoomPlayers[1].PlayAgain = false;
+                currentRoom.Board = new int[currentRoom.Rows, currentRoom.Cols];
             }
         }
 
     }
     public class player
     {
-        public string name;
-        public NetworkStream nstream;
-        public BinaryReader br;
-        public BinaryWriter bw;
-        public Task playerThread;
-        public bool isPlaying = false;
-        public room myRoom = null;
-        public string color;
-        public bool playAgain = false;
+        string name;
+        string color;
+        bool isPlaying = false;
+        bool playAgain = false;
+        room myRoom = null;
+        //player network and streams
+        NetworkStream nstream;
+        BinaryReader br;
+        BinaryWriter bw;
+        //player specific task to handle each player requests
+        Task playerThread;
+
+        //class getters and setters
+        public string Name { get { return name; } set { name = value; } }
+        public string Color { get { return color; } set { color = value; } }
+        public bool IsPlaying { get { return isPlaying; } set { isPlaying = value; } }
+        public bool PlayAgain { get { return playAgain; } set { playAgain = value; } }
+        public room MyRoom { get { return myRoom; } set { myRoom = value; } }
+        public NetworkStream Nstream { get { return nstream; } set { nstream = value; } }
+        public BinaryReader Br { get { return br; } set { br = value; } }
+        public BinaryWriter Bw { get { return bw; } set { bw = value; } }
+        public Task PlayerThread { get { return playerThread; } set { playerThread = value; } }
 
         public void playerHandling()
         {
@@ -440,8 +453,8 @@ namespace serverAppConnect4
                         break;
                     case "320":
                         //MessageBox.Show("join room");
-                        string roomID = arr[1];
-                        int isJoined = Server.joinRoom(this, int.Parse(roomID));
+                        string RoomID = arr[1];
+                        int isJoined = Server.joinRoom(this, int.Parse(RoomID));
                         if (isJoined == 1)
                         {
                             //the player has joined the room as a player
@@ -512,19 +525,25 @@ namespace serverAppConnect4
     }
     public class room
     {
-        static int counter = 0;
-        public int roomID;
-        public string roomName;
-        public List<player> roomPlayers = new List<player>();
-        public int rows; 
-        public int cols;
-        public int[,] board;
-        public int gameEnded = 0;
-
-        public BinaryReader br;
-        public BinaryWriter bw;
-        public Task roomThread;
-
+        int roomID;
+        string roomName;
+        static int counter = 0; //to specify room name
+        //room specifications
+        int rows; 
+        int cols;
+        int[,] board;
+        int gameEnded = 0;
+        //room players list
+        List<player> roomPlayers = new List<player>();
+        
+        //class getters and setters
+        public int RoomID { get { return roomID; } set { roomID = value; } }
+        public string RoomName { get { return roomName; } set { roomName = value; } }
+        public int Rows { get { return rows; } set { rows = value; } }
+        public int Cols { get { return cols; } set { cols = value; } }
+        public int[,] Board { get { return board; } set { board = value; }  }
+        public List<player> RoomPlayers { get { return roomPlayers; } }
+        public int GameEnded { get { return gameEnded; } set { gameEnded = value; } }
 
         public room(player roomOwner, int r, int c)
         {
@@ -534,22 +553,8 @@ namespace serverAppConnect4
             rows = r;
             cols = c;
             board = new int[r, c];
-            roomOwner.isPlaying = true;
+            roomOwner.IsPlaying = true;
             roomPlayers.Add(roomOwner);
         }
-        //public void roomHandling()
-        //{
-        //    while (true)
-        //    {
-        //        string roomRequest = this.br.ReadString();
-        //        if (roomRequest == "310")
-        //        {
-        //            MessageBox.Show("create room!!!!!!! from room class");
-        //            //int row, col;
-        //            //Server.createRoom(this);
-        //        }
-
-        //    }
-        //}
     }
 }
