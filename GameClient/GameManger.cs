@@ -78,6 +78,7 @@ namespace Client
                 recieve = new Task(ReceiveServerRequest);
                 recieve.Start();
                 SendServerRequest(Flag.getPlayers);
+                SendServerRequest(Flag.getRooms);
 
 
             }
