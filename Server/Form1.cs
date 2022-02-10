@@ -187,6 +187,7 @@ namespace serverAppConnect4
                 {
                     //the player will join as a spectator
                     requestedRoom.RoomPlayers.Add(askingPlayer);
+                    askingPlayer.MyRoom = requestedRoom;
                     //LOOOP ON ARRAY AND SEND IT [0,0,0,1],[0,0,1,0]
                     ///askingPlayer.Bw.Write(requestedRoom.Board.ToString());
                     retVal = 2;
@@ -250,13 +251,18 @@ namespace serverAppConnect4
                 //the room owner refused 
                 askingPlayer.Bw.Write("405,0");
                 //remove this player from the room
-                currentRoom.RoomPlayers.RemoveAt(1);
+                currentRoom.RoomPlayers.Remove(askingPlayer);
                 //remove the room refrence from the player
                 askingPlayer.MyRoom = null;
                 //remove all audience
-                for (int i = 2; i <currentRoom.RoomPlayers.Count; i++)
+                int roomPlayersCount = currentRoom.RoomPlayers.Count;
+                for (int i = 1; i < roomPlayersCount; i++)
                 {
-                    currentRoom.RoomPlayers.RemoveAt(i);
+                    currentRoom.RoomPlayers[i].MyRoom = null;
+                }
+                for (int i = 1; i < roomPlayersCount; i++)
+                {
+                    currentRoom.RoomPlayers.RemoveAt(1);
                 }
             }
 
@@ -327,6 +333,7 @@ namespace serverAppConnect4
         {
             room currentRoom = moveSender.MyRoom;
             currentRoom.Board[x, y] = 1;
+            //update the room board and send it to all the room players
             updateBoared(currentRoom);
             bool isWinner = checkWinner(moveSender);
             if (isWinner)
@@ -373,11 +380,13 @@ namespace serverAppConnect4
                         }
                         else//the guest doesn't want to play so kick him out
                         {
+                            currentRoom.RoomPlayers[1].PlayAgain = false;
                             waitToPlay(moveSender, 0);
                         }
                     }
                     else//the room owner doesn't want to play again
                     {
+                        currentRoom.RoomPlayers[1].PlayAgain = false;
                         waitToPlay(moveSender, 0);
                     }
 
@@ -394,25 +403,25 @@ namespace serverAppConnect4
                         }
                         else//the room owner doesn't want to play so kick the guest out
                         {
+                            currentRoom.RoomPlayers[1].PlayAgain = false;
                             waitToPlay(moveSender, 0);
                         }
                     }
                     else
                     {
+                        currentRoom.RoomPlayers[1].PlayAgain = false;
                         waitToPlay(moveSender, 0);
                     }
                 }
                 //restore the default settings
                 currentRoom.GameEnded = 0;
                 currentRoom.RoomPlayers[0].PlayAgain = false;
-                currentRoom.RoomPlayers[1].PlayAgain = false;
                 currentRoom.Board = new int[currentRoom.Rows, currentRoom.Cols];
             }
         }
 
         internal static void disconnectPlayer(player player)
         {
-            room playerRoom = player.MyRoom;
             //close all the player's streams, writer and reader
             player.Br.Close();
             player.Bw.Close();
@@ -422,7 +431,14 @@ namespace serverAppConnect4
             //player.PlayerThread.Dispose();
             //remove the player from the players list 
             Allplayers.Remove(player);
-            playerRoom.RoomPlayers.Remove(player);
+        }
+
+        internal static void leaveRoom(player player)
+        {
+            room currentRoom = player.MyRoom;
+            player.MyRoom = null;
+            currentRoom.RoomPlayers.Remove(player);
+            allRooms.Remove(currentRoom);
         }
     }
     public class player
@@ -539,6 +555,9 @@ namespace serverAppConnect4
                     case "600":
                         int playAgain = int.Parse( arr[1]);
                         Server.playAgain(this, playAgain);
+                        break;
+                    case "650":
+                        Server.leaveRoom(this);
                         break;
                     case "700":
                         Server.disconnectPlayer(this);
