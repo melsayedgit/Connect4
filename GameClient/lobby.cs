@@ -157,8 +157,8 @@ namespace Client
                 board_hight = create_room.board_hight;
            
                 GameManger.SendServerRequest(Flag.createRoom,
-                    GameManger.CurrentPlayer.Name+GameManger.CurrentPlayer.PlayerColor.ToString(),
-                     Roomname_new, board_width.ToString() + board_hight.ToString()
+                    GameManger.CurrentPlayer.Name+"+"+GameManger.CurrentPlayer.PlayerColor.ToString(),
+                     Roomname_new, board_width.ToString() +"+"+ board_hight.ToString()
                     );
 
             }

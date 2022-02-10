@@ -65,6 +65,7 @@ namespace serverAppConnect4
             server = new TcpListener(add, 2222);
             server.Start();
             MessageBox.Show("server started");
+            
             while (true)
             {
                 //start connection
@@ -105,6 +106,10 @@ namespace serverAppConnect4
                 tempPlayer.Name = requestedName;
                 //adding the player to the players list
                 Allplayers.Add(tempPlayer);
+                foreach (var player in Allplayers)
+                {
+                    player.Bw.Write(getPlayer());
+                }
                 tempPlayer.Bw.Write("100,1");
             }
             else
@@ -120,6 +125,12 @@ namespace serverAppConnect4
             roomOwner.MyRoom = tempRoom;
             roomOwner.Color = Color;
             allRooms.Add(tempRoom);
+
+            foreach (var player in Allplayers)
+            {
+                player.Bw.Write(getRooms());
+            }
+          
             //updatelist(); //can't call it here as it needs to be static and when its static the roomlist control can't be accessed
         }
 

@@ -115,6 +115,7 @@ namespace Client
             }
            
             bwr.Write(msg);
+            MessageBox.Show(msg);
 
         }
 
