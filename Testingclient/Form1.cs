@@ -51,9 +51,17 @@ namespace client
         {
             //int[,] arr = new int[3, 4];
             //MessageBox.Show(arr.ToString());
-            string request;
-            request = br.ReadString();
-            requestsList.Items.Add(request);
+            //string request;
+            //request = br.ReadString();
+            //requestsList.Items.Add(request);
+            
+                //Player2 name “value”, Player2 name “value” date of the game
+                string path = @"C:\Users\Blu-Ray\OneDrive\Desktop\iti\visual C# .NET\project\scoreeeSheet.txt";
+
+                StreamWriter Sw = File.AppendText(path);
+                Sw.WriteLine("player 1 score" +"player 2 score" + DateTime.Now.ToString());
+            Sw.Close();
+
         }
     }
 }

@@ -119,9 +119,9 @@ namespace serverAppConnect4
         }
 
         //create a room request
-        public static void createRoom(player roomOwner, string Color)
+        public static void createRoom(player roomOwner, string Color, string roomName,int row, int col)
         {
-            room tempRoom = new room(roomOwner, 6, 6);
+            room tempRoom = new room(roomOwner, roomName, row, col);
             roomOwner.MyRoom = tempRoom;
             roomOwner.Color = Color;
             allRooms.Add(tempRoom);
@@ -130,8 +130,6 @@ namespace serverAppConnect4
             {
                 player.Bw.Write(getRooms());
             }
-          
-            //updatelist(); //can't call it here as it needs to be static and when its static the roomlist control can't be accessed
         }
 
         //updating the roomList
@@ -166,14 +164,14 @@ namespace serverAppConnect4
         }
 
         //joining the room
-        public static int joinRoom(player askingPlayer, int RoomID)
+        public static int joinRoom(player askingPlayer, string roomName)
         {
             int retVal = -1;
             room requestedRoom = null;
             bool isFound = false;
             for (var i = 0; i < allRooms.Count && !isFound; i++)
             {
-                if (allRooms[i].RoomID == RoomID)
+                if (allRooms[i].RoomName == roomName)
                 {
                     requestedRoom = allRooms[i];
                     isFound = true;
@@ -189,8 +187,6 @@ namespace serverAppConnect4
                     askingPlayer.IsPlaying = true;
                     requestedRoom.RoomPlayers.Add(askingPlayer);
                     requestedRoom.RoomPlayers[0].Bw.Write(askingPlayer.Name + " has joined");
-                    //requestedRoom.roomThread = new Task(requestedRoom.roomHandling);
-                    //requestedRoom.roomThread.Start();
                     askingPlayer.MyRoom = requestedRoom;
                     retVal = 1;
                 }
@@ -199,8 +195,6 @@ namespace serverAppConnect4
                     //the player will join as a spectator
                     requestedRoom.RoomPlayers.Add(askingPlayer);
                     askingPlayer.MyRoom = requestedRoom;
-                    //LOOOP ON ARRAY AND SEND IT [0,0,0,1],[0,0,1,0]
-                    ///askingPlayer.Bw.Write(requestedRoom.Board.ToString());
                     retVal = 2;
                 }
             }
@@ -243,7 +237,7 @@ namespace serverAppConnect4
             string askingstr = "400," + askingPlayer.Name + "+" + askingPlayer.Color;
             roomOwner.Bw.Write(askingstr);
             //askingPlayer.Name = "asking to play";
-            MessageBox.Show(roomOwner+ ": " + askingstr);
+            //MessageBox.Show(roomOwner+ ": " + askingstr);
         }
      
         public static int waitToPlay(player roomOwner, int response)
@@ -261,10 +255,12 @@ namespace serverAppConnect4
             {
                 //the room owner refused 
                 askingPlayer.Bw.Write("405,0");
-                //remove this player from the room
-                currentRoom.RoomPlayers.Remove(askingPlayer);
                 //remove the room refrence from the player
                 askingPlayer.MyRoom = null;
+                //restore the player's score to 0
+                askingPlayer.Score = 0;
+                //remove this player from the room
+                currentRoom.RoomPlayers.Remove(askingPlayer);
                 //remove all audience
                 int roomPlayersCount = currentRoom.RoomPlayers.Count;
                 for (int i = 1; i < roomPlayersCount; i++)
@@ -284,7 +280,7 @@ namespace serverAppConnect4
         //update Board
         public static void updateBoared(room currentRoom)
         {
-            string updateStr = "";
+            string updateStr = "410,";
             for (int row = 0; row < currentRoom.Rows; row++)
             {
                 updateStr += "[";
@@ -304,7 +300,7 @@ namespace serverAppConnect4
             {
                 p.Bw.Write(updateStr);
             }
-            MessageBox.Show("boared updated!\n" + updateStr);
+            ////MessageBox.Show("boared updated!\n" + updateStr);
         }
         //End game
         public static void endGame(player winner)
@@ -327,15 +323,16 @@ namespace serverAppConnect4
                 player currentPlayer = currentRoom.RoomPlayers[i];
                 if(currentPlayer.Name == winner.Name)
                 {
-                    winner.Bw.Write("500,1");
+                    currentPlayer.Bw.Write("500,1");
+                    currentPlayer.Score++;
                 }
                 else if(currentPlayer.Name == loser.Name)
                 {
-                    winner.Bw.Write("500,0");
+                    currentPlayer.Bw.Write("500,0");
                 }
                 else
                 {
-                    winner.Bw.Write("500,-1");
+                    currentPlayer.Bw.Write("500,-1");
                 }
             }
         }
@@ -392,12 +389,14 @@ namespace serverAppConnect4
                         else//the guest doesn't want to play so kick him out
                         {
                             currentRoom.RoomPlayers[1].PlayAgain = false;
+                            saveGameToFile(currentRoom);
                             waitToPlay(moveSender, 0);
                         }
                     }
                     else//the room owner doesn't want to play again
                     {
                         currentRoom.RoomPlayers[1].PlayAgain = false;
+                        saveGameToFile(currentRoom);
                         waitToPlay(moveSender, 0);
                     }
 
@@ -415,12 +414,14 @@ namespace serverAppConnect4
                         else//the room owner doesn't want to play so kick the guest out
                         {
                             currentRoom.RoomPlayers[1].PlayAgain = false;
+                            saveGameToFile(currentRoom);
                             waitToPlay(moveSender, 0);
                         }
                     }
                     else
                     {
                         currentRoom.RoomPlayers[1].PlayAgain = false;
+                        saveGameToFile(currentRoom);
                         waitToPlay(moveSender, 0);
                     }
                 }
@@ -430,8 +431,18 @@ namespace serverAppConnect4
                 currentRoom.Board = new int[currentRoom.Rows, currentRoom.Cols];
             }
         }
-
-        internal static void disconnectPlayer(player player)
+        public static void saveGameToFile(room room)
+        {
+            //Player2 name “value”, Player2 name “value” date of the game
+            string path = @"C:\Users\Blu-Ray\OneDrive\Desktop\iti\visual C# .NET\project\scoreSheet.txt";
+            
+            StreamWriter Sw = File.AppendText(path);
+            Sw.WriteLine($"player1: {room.RoomPlayers[0].Name}, Score: {room.RoomPlayers[0].Score}, player2: {room.RoomPlayers[1].Name}, score: {room.RoomPlayers[1].Score}, Date: {DateTime.Now.ToString()}");
+            Sw.Close();
+        }
+        
+        
+        public static void disconnectPlayer(player player)
         {
             //close all the player's streams, writer and reader
             player.Br.Close();
@@ -444,10 +455,11 @@ namespace serverAppConnect4
             Allplayers.Remove(player);
         }
 
-        internal static void leaveRoom(player player)
+        public static void leaveRoom(player player)
         {
             room currentRoom = player.MyRoom;
             player.MyRoom = null;
+            player.Score = 0;
             currentRoom.RoomPlayers.Remove(player);
             allRooms.Remove(currentRoom);
         }
@@ -458,6 +470,7 @@ namespace serverAppConnect4
         string color;
         bool isPlaying = false;
         bool playAgain = false;
+        int score = 0;
         room myRoom = null;
         //player network and streams
         NetworkStream nstream;
@@ -476,6 +489,7 @@ namespace serverAppConnect4
         public string Color { get { return color; } set { color = value; } }
         public bool IsPlaying { get { return isPlaying; } set { isPlaying = value; } }
         public bool PlayAgain { get { return playAgain; } set { playAgain = value; } }
+        public int Score { get { return score; } set { score = value; } }
         public room MyRoom { get { return myRoom; } set { myRoom = value; } }
         public NetworkStream Nstream { get { return nstream; } set { nstream = value; } }
         public BinaryReader Br { get { return br; } set { br = value; } }
@@ -488,9 +502,9 @@ namespace serverAppConnect4
         {
             if (ct.IsCancellationRequested)
             {
-                MessageBox.Show("canceled");
+                //MessageBox.Show("canceled");
             }
-            //MessageBox.Show("player handling thread entered");
+            ////MessageBox.Show("player handling thread entered");
             while (true && !ct.IsCancellationRequested)
             {
                 string clientRequest = this.br.ReadString();
@@ -500,23 +514,39 @@ namespace serverAppConnect4
                 string request = arr[0];
                 string color;
 
-                //MessageBox.Show("request sent = " + request);
+                ////MessageBox.Show("request sent = " + request);
                 switch (request)
                 {
                     case "100":
                         string name = arr[1];
                         Server.checkName(this, name);
                         break;
+                    case "210":
+                        string lobbyinfo = Server.getPlayer();
+                        bw.Write(lobbyinfo);
+                        // //MessageBox.Show(lobbyinfo);
+                        break;
+                    case "220":
+                        // //MessageBox.Show("show rooms");
+                        string s = Server.getRooms();
+                        // //MessageBox.Show(s);
+                        this.bw.Write(s);
+                        break;
                     case "310":
-                        //MessageBox.Show("create room!!!!!!!");
-                        //int row, col;
-                        color = arr[1];
-                        Server.createRoom(this, color);
+                        ////MessageBox.Show("create room!!!!!!!");
+                        //310,playername+color,roomname,row+col
+                        int row, col;
+                        string roomName = arr[3];
+                        color = arr[2];
+                        row = int.Parse(arr[4]);
+                        col = int.Parse(arr[5]);
+                        Server.createRoom(this, color, roomName, row, col);
                         break;
                     case "320":
-                        //MessageBox.Show("join room");
-                        string RoomID = arr[1];
-                        int isJoined = Server.joinRoom(this, int.Parse(RoomID));
+                        ////MessageBox.Show("join room");
+                        //320,roomname
+                        string RoomName = arr[1];
+                        int isJoined = Server.joinRoom(this, RoomName);
                         if (isJoined == 1)
                         {
                             //the player has joined the room as a player
@@ -533,17 +563,6 @@ namespace serverAppConnect4
                             bw.Write("320,-1");
                         }
                         break;
-                    case "210":
-                        string lobbyinfo = Server.getPlayer();
-                        bw.Write(lobbyinfo);
-                        // MessageBox.Show(lobbyinfo);
-                        break;
-                    case "220":
-                        // MessageBox.Show("show rooms");
-                        string s = Server.getRooms();
-                        // MessageBox.Show(s);
-                        this.bw.Write(s);
-                        break;
                     case "400":
                         color = arr[1];
                         Server.askToPlay(this, color);
@@ -553,11 +572,11 @@ namespace serverAppConnect4
                         int response = Server.waitToPlay(this, responseToPlay);
                         if (response == 1)
                         {
-                            MessageBox.Show("game started");
+                            //MessageBox.Show("game started");
                         }
                         else
                         {
-                            MessageBox.Show("player 1 still waiting");
+                            //MessageBox.Show("player 1 still waiting");
                         }
                         break;
                     case "410":
@@ -585,8 +604,7 @@ namespace serverAppConnect4
         public string[] ReadFromClient(string request)
         {
             //when the flag sytax is assigned
-            string[] sArr = request.Split(',');
-            //MessageBox.Show(sArr[0]);
+            string[] sArr = request.Split(',', '+');
             return sArr;
         }
 
@@ -613,11 +631,11 @@ namespace serverAppConnect4
         public List<player> RoomPlayers { get { return roomPlayers; } }
         public int GameEnded { get { return gameEnded; } set { gameEnded = value; } }
 
-        public room(player roomOwner, int r, int c)
+        public room(player roomOwner, string name, int r, int c)
         {
             counter++;
             roomID = counter;
-            roomName = "room number " + roomID;
+            roomName = name;
             rows = r;
             cols = c;
             board = new int[r, c];
