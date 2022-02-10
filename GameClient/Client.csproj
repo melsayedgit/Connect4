@@ -118,6 +118,9 @@
     <EmbeddedResource Include="createRoom.resx">
       <DependentUpon>createRoom.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GameBoard.resx">
+      <DependentUpon>GameBoard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="login.resx">
       <DependentUpon>login.cs</DependentUpon>
     </EmbeddedResource>

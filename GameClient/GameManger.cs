@@ -115,7 +115,7 @@ namespace Client
             }
            
             bwr.Write(msg);
-            MessageBox.Show(msg);
+            //MessageBox.Show(msg);
 
         }
 
@@ -145,7 +145,7 @@ namespace Client
                 default:
                     break;
             }
-            MessageBox.Show(msg);
+          //  MessageBox.Show(msg);
             ReceiveServerRequest();
 
         }

@@ -161,11 +161,12 @@ namespace Client
                     GameManger.CurrentPlayer.Name+"+"+GameManger.CurrentPlayer.PlayerColor.ToString(),
                      Roomname_new, board_width.ToString() +"+"+ board_hight.ToString()
                     );
+                GameBoard.rows = 8;
+                GameBoard.columns = 8;
                 board = new GameBoard();
                 board.Show();
 
             }
-            
 
         }
 

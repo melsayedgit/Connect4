@@ -29,14 +29,20 @@ namespace Client
 
         //SolidBrush player1;
         //SolidBrush player2;
+
+        // Server Connecting members
+         public static int rows;//6
+         public static int columns; //7
+
+
         public GameBoard()
         {
             InitializeComponent();
             //1)
-            this.boardcolumns = new Rectangle[7];
+            this.boardcolumns = new Rectangle[columns];
             //2) 6 rows  by 7 colum 
             // width , Heigth
-            this.board = new int[6, 7];//x,y
+            this.board = new int[rows, columns];//x,y
             //3)
             this.turn = 1;
             //4)
@@ -48,14 +54,14 @@ namespace Client
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.Blue, 24, 24, 340, 300);//
-            for (int i = 0; i < 6; i++)//x
+            e.Graphics.FillRectangle(Brushes.Blue, 24, 24, columns * 48,  rows * 48);//
+            for (int i = 0; i < rows; i++)//x
             {
-                for (int j = 0; j < 7; j++)//y
+                for (int j = 0; j < columns; j++)//y
                 {
                     if (i == 0)
                     {
-                        this.boardcolumns[j] = new Rectangle(32 + 48 * j, 24, 32, 300);
+                        this.boardcolumns[j] = new Rectangle(32 + 48 * j, 24, 32, rows* 48);
                     }
                     e.Graphics.FillEllipse(Brushes.White, (32 + 48 * j), (32 + 48 * i), 32, 32);
 
@@ -207,7 +213,7 @@ namespace Client
         private int EmptyRow(int col)
         {
             // check if valid to add or no
-            for (int i = 5; i >= 0; i--) //(start add from lowest one to highest one)
+            for (int i = rows-1; i >= 0; i--) //(start add from lowest one to highest one)
             {
                 if (this.board[i, col] == 0)
                 {
