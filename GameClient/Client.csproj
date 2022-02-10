@@ -70,6 +70,12 @@
     <Compile Include="createRoom.Designer.cs">
       <DependentUpon>createRoom.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameBoard.Designer.cs">
+      <DependentUpon>GameBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameManger.cs" />
     <Compile Include="login.cs">
       <SubType>Form</SubType>

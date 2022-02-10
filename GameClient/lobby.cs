@@ -22,6 +22,7 @@ namespace Client
         public string Roomname_new;
         public int board_hight;
         public int board_width;
+        public Form board;
         public lobby() 
         {
             InitializeComponent();
@@ -160,6 +161,8 @@ namespace Client
                     GameManger.CurrentPlayer.Name+"+"+GameManger.CurrentPlayer.PlayerColor.ToString(),
                      Roomname_new, board_width.ToString() +"+"+ board_hight.ToString()
                     );
+                board = new GameBoard();
+                board.Show();
 
             }
             
