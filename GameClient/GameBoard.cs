@@ -34,6 +34,11 @@ namespace Client
          public static int rows;//6
          public static int columns; //7
 
+         public static Color HostColor;
+         public static Color ChallangerColor; 
+         static Brush HostBrush;
+         static Brush ChallangerBrush;
+
 
         public GameBoard()
         {
@@ -50,6 +55,9 @@ namespace Client
             //5) player*color
             //player1 = (SolidBrush)Brushes.Red;
             //player2 = (SolidBrush)Brushes.DarkGreen;
+
+            HostBrush = new SolidBrush(HostColor);
+            ChallangerBrush = new SolidBrush(ChallangerColor);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -82,15 +90,15 @@ namespace Client
                     this.board[rowindex, columnIndex] = this.turn;
                     if (this.turn == 1)
                     {
-                        //User One use Red Color 
+                        //User One use Host Color 
                         Graphics g = this.CreateGraphics();
-                        g.FillEllipse(Brushes.Red, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                        g.FillEllipse(HostBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
                     }
                     else if (this.turn == 2)
                     {
                         //User two use DarkGreen Color 
                         Graphics g = this.CreateGraphics();
-                        g.FillEllipse(Brushes.DarkGreen, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                        g.FillEllipse(ChallangerBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
                     }
 
                     //***************Winner***********
