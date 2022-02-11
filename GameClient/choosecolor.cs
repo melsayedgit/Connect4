@@ -61,6 +61,7 @@ namespace Client
         {
             GameManger.UpdatePlayer(selected_color);
             ///  code of start the gameeeeee (open game board ) player2 joined with selected color
+            this.DialogResult = DialogResult.OK;
         }
 
 

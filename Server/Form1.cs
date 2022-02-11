@@ -106,11 +106,11 @@ namespace serverAppConnect4
                 tempPlayer.Name = requestedName;
                 //adding the player to the players list
                 Allplayers.Add(tempPlayer);
+                tempPlayer.Bw.Write("100,1");
                 foreach (var player in Allplayers)
                 {
                     player.Bw.Write(getPlayer());
                 }
-                tempPlayer.Bw.Write("100,1");
             }
             else
             {
@@ -219,7 +219,7 @@ namespace serverAppConnect4
             string roomsData = "220";
             foreach (room r in allRooms)
             {
-                roomsData += "," + r.RoomID + "+" + r.RoomName;
+                roomsData += "," + r.RoomName;
                 foreach (player p in r.RoomPlayers)
                 {
                     roomsData += "+" + p.Name + "-" + p.IsPlaying + "-" + p.Color;

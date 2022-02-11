@@ -23,10 +23,14 @@ namespace Client
         public int board_hight;
         public int board_width;
         public Form board;
-        public lobby() 
+        public static lobby mainlobby;
+        public static GameBoard seegamebaord;
+
+
+        public lobby()  
         {
             InitializeComponent();
-           
+            mainlobby = this;
         }
         ~lobby()
         {
@@ -124,6 +128,7 @@ namespace Client
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
         {
+            GameManger.SendServerRequest(Flag.disconnect, "");
             Application.Exit();
         }
 
@@ -142,12 +147,18 @@ namespace Client
             {
                 if (GameManger.Rommslist[selected.ElementAt(0)].challenger == null)  
                 {
+                    GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
                     join_game = new choosecolor();
-                    join_game.Show();
+                    var dg = join_game.ShowDialog();
+                    if (dg == DialogResult.OK)
+                    {
+                        GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.PlayerColor.ToString());
+                    }
+
                 }
                 else
                 {
-
+                    GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
                     MessageBox.Show(selected.ElementAt(0).ToString());
                     join_spectate = new spectate();
                     join_spectate.Show();

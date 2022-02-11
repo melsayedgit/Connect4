@@ -68,13 +68,14 @@ namespace Client
                 ConnectionStream = server.GetStream();
                 br = new BinaryReader(ConnectionStream);
                 bwr = new BinaryWriter(ConnectionStream);
-                SendServerRequest(Flag.sendLoginInfo, userName);
 
+                SendServerRequest(Flag.sendLoginInfo, userName);
                 UserName = userName;
-                recieve = new Task(ReceiveServerRequest);
-                recieve.Start();
-                SendServerRequest(Flag.getPlayers);
-                SendServerRequest(Flag.getRooms);
+
+                //recieve = new Task(ReceiveServerRequest);
+                //recieve.Start();
+                //SendServerRequest(Flag.getPlayers);
+                //SendServerRequest(Flag.getRooms);
 
 
 
@@ -116,31 +117,31 @@ namespace Client
 
         }
 
-        //public static bool isloginSuc(string userName)
-        //{
-           
-        //    var msg = br.ReadString();
-        //    var msgArray = msg.Split(',');
-        //    Flag flag = (Flag)int.Parse(msgArray[0]);
-        //    var data = msgArray.ToList();
-        //    MessageBox.Show(data.ElementAt(0) + "," + data.ElementAt(1));
-        //    data.RemoveAt(0);
-        //    if (data.ElementAt(0) == "1")
-        //    {
-        //        UserName = userName;
-        //        recieve = new Task(ReceiveServerRequest);
-        //        recieve.Start();
-        //        SendServerRequest(Flag.getPlayers);
-        //        SendServerRequest(Flag.getRooms);
+        public static bool isloginSuc(string userName)
+        {
+            
+            var msg = br.ReadString();
+            var msgArray = msg.Split(',');
+            Flag flag = (Flag)int.Parse(msgArray[0]);
+            var data = msgArray.ToList();
+           // MessageBox.Show(data.ElementAt(0) + "," + data.ElementAt(1));
+            data.RemoveAt(0);
+            if (data.ElementAt(0) == "1")
+            {
+                UserName = userName;
+                recieve = new Task(ReceiveServerRequest);
+                recieve.Start();
+                SendServerRequest(Flag.getPlayers);
+                SendServerRequest(Flag.getRooms);
 
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("the name is already taking please use another one");
-        //        return false;
-        //    }
-        //}
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("the name is already taking please use another one");
+                return false;
+            }
+        }
 
 
         public static void ReceiveServerRequest()
@@ -159,6 +160,9 @@ namespace Client
                 case Flag.getRooms:
                     Rommslist = GetRooms(data);
                     break;
+                case Flag.waittopaly:
+                    playgame(); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
+                    break;
                 case Flag.createRoom:
                     break;
                 case Flag.joinRoom:
@@ -166,12 +170,22 @@ namespace Client
                 case Flag.SendMove:
                     break;
                 case Flag.updateBoard:
-                    break;
+                    break;      
                 default:
                     break;
             }
           //  MessageBox.Show(msg);
             ReceiveServerRequest();
+
+        }
+
+        private static void playgame()
+        {
+
+            lobby.mainlobby.Hide();
+          //  lobby.seegamebaord = new GameBoard();
+           // lobby.seegamebaord.Show();
+
 
         }
 
@@ -273,8 +287,10 @@ namespace Client
      getRooms = 220,
      createRoom = 310,
      joinRoom = 320,
+     asktoplay = 400,
+     waittopaly = 405,
      SendMove = 410,
-     updateBoard =420
-
+     updateBoard =420,
+     disconnect = 700
     }
 }

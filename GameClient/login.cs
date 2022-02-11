@@ -36,27 +36,36 @@ namespace Client
                     try
                     {
                         GameManger.Login(playername);
-                        //  firstlogin = false;
-                        start_lobby = new lobby();
-                        start_lobby.Show();
-                        this.Hide();
+                        firstlogin = false;
+                        //start_lobby = new lobby();
+                        //start_lobby.Show();
+                        //this.Hide();
                     }
+
                     catch (Exception)
                     {
                         MessageBox.Show("The Server is Offline please try again later");
 
                     }
 
-                    //if (GameManger.isloginSuc(playername))
-                    //{
-                    //    start_lobby = new lobby();
-                    //    start_lobby.Show();
-                    //    this.Hide();
-                    //}
+                    if (GameManger.isloginSuc(playername))
+                    {
+                        start_lobby = new lobby();
+                        start_lobby.Show();
+                        this.Hide();
+                    }
 
                 }
-
-                
+                else
+                {
+                    GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
+                    if (GameManger.isloginSuc(playername))
+                    {
+                        start_lobby = new lobby();
+                        start_lobby.Show();
+                        this.Hide();
+                    }
+                }
             }
 
             
