@@ -21,7 +21,7 @@ namespace Client
 
         static string ip;
         static int port;
-        static bool connStatues;
+        public static bool connStatues;
         static string UserName;
 
 
@@ -134,6 +134,8 @@ namespace Client
                 SendServerRequest(Flag.getPlayers);
                 SendServerRequest(Flag.getRooms);
 
+                connStatues = true;
+
                 return true;
             }
             else
@@ -186,8 +188,8 @@ namespace Client
 
                 lobby.mainlobby.Hide();
                 lobby.seegamebaord = new GameBoard();
-                GameBoard.rows = int.Parse(sizear[0]);
-                GameBoard.columns = int.Parse(sizear[1]);
+                GameBoard.columns = int.Parse(sizear[0]);
+                GameBoard.rows = int.Parse(sizear[1]);
                 lobby.seegamebaord.Show();
             } ));
 

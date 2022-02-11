@@ -134,6 +134,15 @@ namespace Client
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
+        private void Login_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (GameManger.connStatues)
+            {
+                GameManger.SendServerRequest(Flag.disconnect, "");
+            }
+        
+        }
         // end code of dragable form
     }
 }
