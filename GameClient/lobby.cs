@@ -126,17 +126,35 @@ namespace Client
         {
             Application.Exit();
         }
+
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (true) //no room selected
+            var cons = flowLayoutPanel2.Controls;
+            var selected = from RoomControl con in cons
+                           where con.BackColor == Color.Silver
+                           select con.TabIndex;
+           
+            if (selected.Count() == 0) //no room selected
             {
-                join_spectate = new spectate();
-                join_spectate.Show();
+                MessageBox.Show("please select a room before joining");
             }
             else
             {
-                join_game= new choosecolor();
-                join_game.Show();
+                if (GameManger.Rommslist[selected.ElementAt(0)].challenger == null)  
+                {
+                    join_game = new choosecolor();
+                    join_game.Show();
+                }
+                else
+                {
+
+                    MessageBox.Show(selected.ElementAt(0).ToString());
+                    join_spectate = new spectate();
+                    join_spectate.Show();
+
+                }
+
+
 
             }
 
@@ -161,8 +179,8 @@ namespace Client
                     GameManger.CurrentPlayer.Name+"+"+GameManger.CurrentPlayer.PlayerColor.ToString(),
                      Roomname_new, board_width.ToString() +"+"+ board_hight.ToString()
                     );
-                GameBoard.rows = 8;
-                GameBoard.columns = 8;
+                GameBoard.rows = board_width;
+                GameBoard.columns = board_hight;
                 board = new GameBoard();
                 board.Show();
 
@@ -200,6 +218,8 @@ namespace Client
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
+
 
 
 

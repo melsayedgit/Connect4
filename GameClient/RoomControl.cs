@@ -16,13 +16,18 @@ namespace Client
        
         public string selected_room;
         private string _roomname;
+        
         public string roomname
         {
             get { return _roomname; }
             set { _roomname = value; label1.Text = value; }
         }
+
+
+
         public RoomControl()
         {
+
             InitializeComponent();
         }
 

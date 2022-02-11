@@ -57,10 +57,9 @@ namespace Client
         ///  Connect the user to the server and return and return The result of the attempt 
         /// </summary>
    
-        public static bool Login(string userName)
+        public static void Login(string userName)
         {
-            bool isconnected = false;
-
+    
 
             try
             {
@@ -69,11 +68,8 @@ namespace Client
                 ConnectionStream = server.GetStream();
                 br = new BinaryReader(ConnectionStream);
                 bwr = new BinaryWriter(ConnectionStream);
+                SendServerRequest(Flag.sendLoginInfo, userName);
 
-                isconnected = true;
-                connStatues = true;
-                
-                SendServerRequest(Flag.sendLoginInfo,userName);
                 UserName = userName;
                 recieve = new Task(ReceiveServerRequest);
                 recieve.Start();
@@ -81,15 +77,16 @@ namespace Client
                 SendServerRequest(Flag.getRooms);
 
 
+
+
             }
             catch (Exception e)
             {
-               
-                connStatues = isconnected;
+            
                 throw e;
             }
 
-            return isconnected;
+           
 
 
 
@@ -119,9 +116,37 @@ namespace Client
 
         }
 
+        //public static bool isloginSuc(string userName)
+        //{
+           
+        //    var msg = br.ReadString();
+        //    var msgArray = msg.Split(',');
+        //    Flag flag = (Flag)int.Parse(msgArray[0]);
+        //    var data = msgArray.ToList();
+        //    MessageBox.Show(data.ElementAt(0) + "," + data.ElementAt(1));
+        //    data.RemoveAt(0);
+        //    if (data.ElementAt(0) == "1")
+        //    {
+        //        UserName = userName;
+        //        recieve = new Task(ReceiveServerRequest);
+        //        recieve.Start();
+        //        SendServerRequest(Flag.getPlayers);
+        //        SendServerRequest(Flag.getRooms);
+
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("the name is already taking please use another one");
+        //        return false;
+        //    }
+        //}
+
+
         public static void ReceiveServerRequest()
         {
             var msg = br.ReadString();
+            MessageBox.Show(msg);
             var msgArray = msg.Split(',');
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();
@@ -174,7 +199,13 @@ namespace Client
         {   
             var rooms = new List<Room>();
 
-
+            foreach (var item in data)
+            {
+                var rom = item.Split('+');
+                var roomName = rom[0];
+                var host = rom[1].Split('-');
+                rooms.Add(new Room(roomName, new Player(host[0])));
+            }
             return rooms;
         }
 

@@ -48,12 +48,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Stencil", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(26)))), ((int)(((byte)(74)))));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label1.Location = new System.Drawing.Point(105, 35);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(237, 46);
+            this.label1.Size = new System.Drawing.Size(212, 44);
             this.label1.TabIndex = 1;
             this.label1.Text = "Connect 4 ";
             // 
