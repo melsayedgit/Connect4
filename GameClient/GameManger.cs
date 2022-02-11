@@ -161,7 +161,7 @@ namespace Client
                     Rommslist = GetRooms(data);
                     break;
                 case Flag.waittopaly:
-                    playgame(); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
+                    playgame(data.ElementAt(1)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
                     break;
                 case Flag.createRoom:
                     break;
@@ -179,12 +179,19 @@ namespace Client
 
         }
 
-        private static void playgame()
+        private static void playgame(string size)
         {
+            var sizear = size.Split('+');
+            lobby.mainlobby.Invoke(new MethodInvoker(delegate () {
 
-            lobby.mainlobby.Hide();
-          //  lobby.seegamebaord = new GameBoard();
-           // lobby.seegamebaord.Show();
+                lobby.mainlobby.Hide();
+                lobby.seegamebaord = new GameBoard();
+                GameBoard.rows = int.Parse(sizear[0]);
+                GameBoard.columns = int.Parse(sizear[1]);
+                lobby.seegamebaord.Show();
+            } ));
+
+
 
 
         }

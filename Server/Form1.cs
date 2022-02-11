@@ -249,7 +249,7 @@ namespace serverAppConnect4
             if (response == 1)
             {
                 //if the room owner accepted
-                askingPlayer.Bw.Write("405,1");
+                askingPlayer.Bw.Write("405,1," + currentRoom.Rows + "+" + currentRoom.Cols);
                 retVal = 1;
             }else
             {
