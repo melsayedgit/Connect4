@@ -250,7 +250,9 @@ namespace serverAppConnect4
         public static void sendMove(player moveSender, int x, int y)
         {
             room currentRoom = moveSender.MyRoom;
+            //change the room player turn & change the fill board according to the player turn
             currentRoom.Board[x, y] = (currentRoom.PlayerTurn == 1) ? 1 : 2;
+            currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
             //update the room board and send it to all the room players
             updateBoared(currentRoom);
             int winnerPlayer = currentRoom.checkWin(currentRoom.PlayerTurn);
@@ -268,21 +270,20 @@ namespace serverAppConnect4
         //update the Board in all the room members 
         public static void updateBoared(room currentRoom)
         {
-            string updateStr = "410,";
+            //parse the room board and sent it to all the room players
+            //410,2,0+1+0+2+0,0+1+0+2+0
+            string updateStr = $"410,{currentRoom.PlayerTurn},";
             for (int row = 0; row < currentRoom.Rows; row++)
             {
-                updateStr += "[";
                 for (int col = 0; col < currentRoom.Cols; col++)
                 {
                     if (col < currentRoom.Cols - 1)
-                        updateStr += currentRoom.Board[row, col] + ",";
+                        updateStr += currentRoom.Board[row, col] + "+";
                     else
                         updateStr += currentRoom.Board[row, col];
                 }
                 if (row < currentRoom.Rows - 1)
-                    updateStr += "],";
-                else
-                    updateStr += "]";
+                    updateStr += ",";
             }
             foreach (player p in currentRoom.RoomPlayers)
             {
