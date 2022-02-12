@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Popups;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -164,7 +165,7 @@ namespace Client
                     Rommslist = GetRooms(data);
                     break;
                 case Flag.waittopaly:
-                    playgame(data.ElementAt(1)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
+                    playgame(data.ElementAt(0), data.ElementAt(1)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
                     break;
                 case Flag.createRoom:
                     break;
@@ -174,7 +175,11 @@ namespace Client
                     updateBoard(data);
                     break;
                 case Flag.updateBoard:
-                    break;      
+                    break;
+                case Flag.asktoplay:
+                    //"400, askingPlayer.Name + askingPlayer.Color"
+                    acceptTheChallenger(data[0]);
+                    break;
                 default:
                     break;
             }
@@ -183,26 +188,45 @@ namespace Client
 
         }
 
-        private static void playgame(string size)
+        private static void acceptTheChallenger(string data)
         {
-            var sizear = size.Split('+');
-            lobby.mainlobby.Invoke(new MethodInvoker(delegate () {
+            //pop up a menu asking the room owner if he wants the challenger to play or not
+            MessageBox.Show("do you want to accept the challenger?");
+            acceptTheChallenger dlg = new acceptTheChallenger();
+            string[] arr = data.Split('+');
+            dlg.challengerLabel = $"{arr[0]} wants to challenge you to play, \nhis color is{arr[1]}";
+            DialogResult ownerResponse = dlg.ShowDialog();
+            //if the owner accepts
+            if (ownerResponse == DialogResult.OK)
+            {
+                SendServerRequest(Flag.waittopaly, "1");
+            }
+            else
+            {
+                SendServerRequest(Flag.waittopaly, "0");
+            }
+        }
 
-                lobby.mainlobby.Hide();
+        private static void playgame(string response, string size)
+        {
+            if (int.Parse(response) == 1)
+            {
+                var sizear = size.Split('+');
+                lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
+                {
+                    lobby.wait.Close();
+                    //lobby.mainlobby.Hide();
+                    MessageBox.Show("the owner has accepted you!");
+                    GameBoard.columns = int.Parse(sizear[0]);
+                    GameBoard.rows = int.Parse(sizear[1]);
+                    GameBoard.HostColor = Color.Red;
+                    GameBoard.ChallangerColor = Color.Purple;
+                    GameBoard.turn = 2;
 
-                GameBoard.columns = int.Parse(sizear[0]);
-                GameBoard.rows = int.Parse(sizear[1]);
-                GameBoard.HostColor = Color.Red;
-                GameBoard.ChallangerColor = Color.Purple;
-                GameBoard.turn = 2;
-
-                lobby.seegamebaord = new GameBoard();
-                lobby.seegamebaord.Show();
-            } ));
-
-
-
-
+                    lobby.seegamebaord = new GameBoard();
+                    lobby.seegamebaord.Show();
+                }));
+            }
         }
        private static void updateBoard(List<string> data)
        {

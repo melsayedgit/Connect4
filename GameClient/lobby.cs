@@ -153,7 +153,7 @@ namespace Client
                     var dg = join_game.ShowDialog();
                     if (dg == DialogResult.OK)
                     {
-                        GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.PlayerColor.ToString());
+                        GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.Name ,GameManger.CurrentPlayer.PlayerColor.ToString());
                          wait = new waiting();
                         wait.Show();
 

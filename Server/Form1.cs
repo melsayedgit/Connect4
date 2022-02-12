@@ -179,7 +179,7 @@ namespace serverAppConnect4
                     //the player will play
                     askingPlayer.IsPlaying = true;
                     requestedRoom.RoomPlayers.Add(askingPlayer);
-                    requestedRoom.RoomPlayers[0].Bw.Write(askingPlayer.Name + " has joined");
+                    //requestedRoom.RoomPlayers[0].Bw.Write(askingPlayer.Name + " has joined");
                     askingPlayer.MyRoom = requestedRoom;
                     retVal = 1;
                 }
@@ -430,6 +430,7 @@ namespace serverAppConnect4
             player.Br.Close();
             player.Bw.Close();
             player.Nstream.Close();
+            //we need to close the connection socket also and use .shutdown()
             //dispose the player's thread
             player.tokenSource.Cancel();
             //player.PlayerThread.Dispose();
