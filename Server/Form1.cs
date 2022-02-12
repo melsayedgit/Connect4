@@ -31,18 +31,16 @@ namespace serverAppConnect4
         //requests enum
         public enum request
         {
-            //receiveLoginInfo = 100,
-            //getPlayers = 210,
-            //getRooms = 220,
-            //createRoom = 310,
-            //joinRoom = 320,
-
-            //askToplay = 400,
-            //waitToPlay = 405,
+            receiveLoginInfo = 100,
+            getPlayers = 210,
+            getRooms = 220,
+            createRoom = 310,
+            joinRoom = 320,
+            askToplay = 400,
+            waitToPlay = 405,
             SendMove = 410,
             updateBoard = 420,
             gameEnded = 500,
-
             disconnectPlayer = 700
         }
         #endregion
@@ -65,7 +63,7 @@ namespace serverAppConnect4
             server = new TcpListener(add, 2222);
             server.Start();
             MessageBox.Show("server started");
-            
+
             while (true)
             {
                 //start connection
@@ -80,7 +78,7 @@ namespace serverAppConnect4
 
                 //assigning the cancellation token
                 tempPlayer.ct = tempPlayer.tokenSource.Token;
-                
+
 
                 //launch the thread of the new player
                 tempPlayer.PlayerThread = new Task(tempPlayer.playerHandling, tempPlayer.tokenSource.Token);
@@ -96,7 +94,7 @@ namespace serverAppConnect4
             bool exists = false;
             foreach (player p in Allplayers)
             {
-                if(p.Name == requestedName)
+                if (p.Name == requestedName)
                 {
                     exists = true;
                 }
@@ -118,8 +116,34 @@ namespace serverAppConnect4
             }
         }
 
+        //send the online players and rooms to the connected client
+        //get players
+        public static string getPlayer()
+        {
+            string lobbyinfo = "210";
+            foreach (player p in Allplayers)
+            {
+                lobbyinfo += "," + p.Name + "+" + p.IsPlaying;
+            }
+            return lobbyinfo;
+        }
+        //get rooms
+        public static string getRooms()
+        {
+            string roomsData = "220";
+            foreach (room r in allRooms)
+            {
+                roomsData += "," + r.RoomName;
+                foreach (player p in r.RoomPlayers)
+                {
+                    roomsData += "+" + p.Name + "-" + p.IsPlaying + "-" + p.Color;
+                }
+            }
+            return roomsData;
+        }
+
         //create a room request
-        public static void createRoom(player roomOwner, string Color, string roomName,int row, int col)
+        public static void createRoom(player roomOwner, string Color, string roomName, int row, int col)
         {
             room tempRoom = new room(roomOwner, roomName, row, col);
             roomOwner.MyRoom = tempRoom;
@@ -130,37 +154,6 @@ namespace serverAppConnect4
             {
                 player.Bw.Write(getRooms());
             }
-        }
-
-        //updating the roomList
-        public void UpdateList()
-        {
-            roomList.Items.Clear();
-            for(int i=0; i< allRooms.Count; i++)
-            {
-                //if there are players in the room
-                if (allRooms[i].RoomPlayers.Count != 0)
-                {
-                    roomList.Items.Add(allRooms[i].RoomName);
-                    foreach (player p in allRooms[i].RoomPlayers)
-                    {
-                        roomList.Items.Add("    " + p.Name);
-                    }
-                }
-                else
-                {
-                    roomList.Items.Remove(allRooms[i]);
-                }
-            }
-            playerList.Items.Clear();
-            foreach (player p in Allplayers)
-            {
-                playerList.Items.Add(p.Name + " entered");
-            }
-        }
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            UpdateList();
         }
 
         //joining the room
@@ -201,34 +194,7 @@ namespace serverAppConnect4
             return retVal;
         }
 
-        //send the online players and rooms to the connected client
-        //get players
-        public static string getPlayer()
-        {
-            string lobbyinfo = "210";
-            foreach (player p in Allplayers)
-            {
-                lobbyinfo += "," + p.Name + "+" + p.IsPlaying;
-            }
-            return lobbyinfo;
-        }
-
-        //get rooms
-        public static string getRooms()
-        {
-            string roomsData = "220";
-            foreach (room r in allRooms)
-            {
-                roomsData += "," + r.RoomName;
-                foreach (player p in r.RoomPlayers)
-                {
-                    roomsData += "+" + p.Name + "-" + p.IsPlaying + "-" + p.Color;
-                }
-            }
-            return roomsData;
-        }
-
-        //ask to play
+        //ask the room owner to play
         public static void askToPlay(player askingPlayer, string Color)
         {
             room currentRoom = askingPlayer.MyRoom;
@@ -239,7 +205,7 @@ namespace serverAppConnect4
             //askingPlayer.Name = "asking to play";
             //MessageBox.Show(roomOwner+ ": " + askingstr);
         }
-     
+        //responding to the player asing to play
         public static int waitToPlay(player roomOwner, int response)
         {
             room currentRoom = roomOwner.MyRoom;
@@ -249,9 +215,10 @@ namespace serverAppConnect4
             if (response == 1)
             {
                 //if the room owner accepted
-                askingPlayer.Bw.Write("405,1," + currentRoom.Rows + "+" + currentRoom.Cols);
+                askingPlayer.Bw.Write($"405,1,{currentRoom.Rows}+{currentRoom.Cols},{roomOwner.Color}");
                 retVal = 1;
-            }else
+            }
+            else
             {
                 //the room owner refused 
                 askingPlayer.Bw.Write("405,0");
@@ -277,7 +244,28 @@ namespace serverAppConnect4
             return retVal;
         }
 
-        //update Board
+
+        //send the move from one player to all the other in the room and check if this move win
+        //send move
+        public static void sendMove(player moveSender, int x, int y)
+        {
+            room currentRoom = moveSender.MyRoom;
+            currentRoom.Board[x, y] = (currentRoom.PlayerTurn == 1) ? 1 : 2;
+            //update the room board and send it to all the room players
+            updateBoared(currentRoom);
+            int winnerPlayer = currentRoom.checkWin(currentRoom.PlayerTurn);
+            if (winnerPlayer == 1 || winnerPlayer == 2)
+            {
+                endGame(moveSender);
+                MessageBox.Show($"{moveSender.Name} has won the game");
+            }
+            else
+            {
+                //change the room player turn
+                currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
+            }
+        }
+        //update the Board in all the room members 
         public static void updateBoared(room currentRoom)
         {
             string updateStr = "410,";
@@ -286,12 +274,12 @@ namespace serverAppConnect4
                 updateStr += "[";
                 for (int col = 0; col < currentRoom.Cols; col++)
                 {
-                    if(col < currentRoom.Cols - 1)
+                    if (col < currentRoom.Cols - 1)
                         updateStr += currentRoom.Board[row, col] + ",";
                     else
-                        updateStr += currentRoom.Board[row, col] ;
+                        updateStr += currentRoom.Board[row, col];
                 }
-                if(row < currentRoom.Rows -1)
+                if (row < currentRoom.Rows - 1)
                     updateStr += "],";
                 else
                     updateStr += "]";
@@ -300,9 +288,9 @@ namespace serverAppConnect4
             {
                 p.Bw.Write(updateStr);
             }
-            ////MessageBox.Show("boared updated!\n" + updateStr);
+            MessageBox.Show("boared updated!\n" + updateStr);
         }
-        //End game
+        //End game if a player has won in this move
         public static void endGame(player winner)
         {
             room currentRoom = winner.MyRoom;
@@ -318,15 +306,15 @@ namespace serverAppConnect4
                 loser = currentRoom.RoomPlayers[0];
             }
             //sending the end game response 
-            for (var i =0; i < currentRoom.RoomPlayers.Count; i++)
+            for (var i = 0; i < currentRoom.RoomPlayers.Count; i++)
             {
                 player currentPlayer = currentRoom.RoomPlayers[i];
-                if(currentPlayer.Name == winner.Name)
+                if (currentPlayer.Name == winner.Name)
                 {
                     currentPlayer.Bw.Write("500,1");
                     currentPlayer.Score++;
                 }
-                else if(currentPlayer.Name == loser.Name)
+                else if (currentPlayer.Name == loser.Name)
                 {
                     currentPlayer.Bw.Write("500,0");
                 }
@@ -336,26 +324,9 @@ namespace serverAppConnect4
                 }
             }
         }
-        //send move
-        public static void sendMove(player moveSender, int x, int y)
-        {
-            room currentRoom = moveSender.MyRoom;
-            currentRoom.Board[x, y] = 1;
-            //update the room board and send it to all the room players
-            updateBoared(currentRoom);
-            bool isWinner = checkWinner(moveSender);
-            if (isWinner)
-            {
-                endGame(moveSender);
-            }
-        }
-        public static bool checkWinner(player moveSender)
-        {
-            bool isWinner = false;
-            return isWinner;
-        }
+        
 
-        //play again after one has win or lose
+        //play again after one has win or lose and save the score to the server text file
         public static void playAgain(player moveSender, int PlayAgain)
         {
             //600,1 sending player wants to play again
@@ -435,13 +406,23 @@ namespace serverAppConnect4
         {
             //Player2 name “value”, Player2 name “value” date of the game
             string path = @"C:\Users\Blu-Ray\OneDrive\Desktop\iti\visual C# .NET\project\scoreSheet.txt";
-            
+
             StreamWriter Sw = File.AppendText(path);
             Sw.WriteLine($"player1: {room.RoomPlayers[0].Name}, Score: {room.RoomPlayers[0].Score}, player2: {room.RoomPlayers[1].Name}, score: {room.RoomPlayers[1].Score}, Date: {DateTime.Now.ToString()}");
             Sw.Close();
         }
-        
-        
+
+
+        //if the room owner wants to leave the room and go to the lobby again
+        public static void leaveRoom(player player)
+        {
+            room currentRoom = player.MyRoom;
+            player.MyRoom = null;
+            player.Score = 0;
+            currentRoom.RoomPlayers.Remove(player);
+            allRooms.Remove(currentRoom);
+        }
+        //when the player wants to logout of the game
         public static void disconnectPlayer(player player)
         {
             //close all the player's streams, writer and reader
@@ -454,15 +435,39 @@ namespace serverAppConnect4
             //remove the player from the players list 
             Allplayers.Remove(player);
         }
+        
 
-        public static void leaveRoom(player player)
+        //updating the roomList in the server GUI
+        public void UpdateList()
         {
-            room currentRoom = player.MyRoom;
-            player.MyRoom = null;
-            player.Score = 0;
-            currentRoom.RoomPlayers.Remove(player);
-            allRooms.Remove(currentRoom);
+            roomList.Items.Clear();
+            for (int i = 0; i < allRooms.Count; i++)
+            {
+                //if there are players in the room
+                if (allRooms[i].RoomPlayers.Count != 0)
+                {
+                    roomList.Items.Add(allRooms[i].RoomName);
+                    foreach (player p in allRooms[i].RoomPlayers)
+                    {
+                        roomList.Items.Add("    " + p.Name);
+                    }
+                }
+                else
+                {
+                    roomList.Items.Remove(allRooms[i]);
+                }
+            }
+            playerList.Items.Clear();
+            foreach (player p in Allplayers)
+            {
+                playerList.Items.Add(p.Name + " entered");
+            }
         }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            UpdateList();
+        }
+
     }
     public class player
     {
@@ -596,11 +601,12 @@ namespace serverAppConnect4
                 
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+
+       /// <summary>
+       /// a function to parse the incoming requests from client
+       /// </summary>
+       /// <param incoming request="request"></param>
+       /// <returns>an array of strings that represents the request</returns>
         public string[] ReadFromClient(string request)
         {
             //when the flag sytax is assigned
@@ -613,23 +619,25 @@ namespace serverAppConnect4
     {
         int roomID;
         string roomName;
-        static int counter = 0; //to specify room name
+        static int counter = 0; //to specify room ID
         //room specifications
-        int rows; 
+        int rows;
         int cols;
         int[,] board;
+        int playerTurn = 1;
         int gameEnded = 0;
         //room players list
         List<player> roomPlayers = new List<player>();
-        
+
         //class getters and setters
         public int RoomID { get { return roomID; } set { roomID = value; } }
         public string RoomName { get { return roomName; } set { roomName = value; } }
         public int Rows { get { return rows; } set { rows = value; } }
         public int Cols { get { return cols; } set { cols = value; } }
-        public int[,] Board { get { return board; } set { board = value; }  }
-        public List<player> RoomPlayers { get { return roomPlayers; } }
+        public int[,] Board { get { return board; } set { board = value; } }
+        public int PlayerTurn { get { return playerTurn; } set { playerTurn = value; } }
         public int GameEnded { get { return gameEnded; } set { gameEnded = value; } }
+        public List<player> RoomPlayers { get { return roomPlayers; } }
 
         public room(player roomOwner, string name, int r, int c)
         {
@@ -642,5 +650,77 @@ namespace serverAppConnect4
             roomOwner.IsPlaying = true;
             roomPlayers.Add(roomOwner);
         }
+        
+        
+        //chech if the given player has won the game 
+        public int checkWin(int Checkplayer)
+        {
+            //1)Vertical
+            for (int row = 0; row < this.board.GetLength(0) - 3; row++)
+            {
+                for (int colum = 0; colum < this.board.GetLength(1); colum++)
+                {
+                    //check if the winner get 4 point vertically 
+                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum], this.board[row + 2, colum], this.board[row + 3, colum]))
+                    {
+                        //if True
+                        return Checkplayer;
+                    }
+                }
+            }
+            //2)Horizontal
+            for (int row = 0; row < this.board.GetLength(0); row++)
+            {
+                for (int colum = 0; colum < this.board.GetLength(1) - 3; colum++)
+                {
+                    //check if the winner get 4 point Horizontal 
+                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row, colum + 1], this.board[row, colum + 2], this.board[row, colum + 3]))
+                    {
+                        //if True
+                        return Checkplayer;
+                    }
+                }
+            }
+            //3)top-left diagonal(\)
+            for (int row = 0; row < this.board.GetLength(0) - 3; row++)
+            {
+                for (int colum = 0; colum < this.board.GetLength(1) - 3; colum++)
+                {
+                    //check if the winner get 4 point Horizontal 
+                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum + 1], this.board[row + 2, colum + 2], this.board[row + 3, colum + 3]))
+                    {
+                        //if True
+                        return Checkplayer;
+                    }
+                }
+            }
+            //4)top-right diagonal(/)
+            for (int row = 0; row < this.board.GetLength(0) - 3; row++)
+            {
+                for (int colum = 3; colum < this.board.GetLength(1); colum++)
+                {
+                    //check if the winner get 4 point Horizontal 
+                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum - 1], this.board[row + 2, colum - 2], this.board[row + 3, colum - 3]))
+                    {
+                        //if True
+                        return Checkplayer;
+                    }
+                }
+            }
+
+            return -1;
+        }
+        public bool AllNumber(int tocheck, params int[] numbers)
+        {
+            foreach (int num in numbers)
+            {
+                if (num != tocheck) //check if the player get 4 point 
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 }
