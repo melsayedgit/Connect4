@@ -38,6 +38,7 @@ namespace Client
          public static Color ChallangerColor; 
          static Brush HostBrush;
          static Brush ChallangerBrush;
+        public static GameBoard currntGameboard;
 
 
         public GameBoard()
@@ -58,6 +59,7 @@ namespace Client
 
             HostBrush = new SolidBrush(HostColor);
             ChallangerBrush = new SolidBrush(ChallangerColor);
+            currntGameboard = this;
         }
 
         public void repaintBord()

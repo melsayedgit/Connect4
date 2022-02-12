@@ -171,6 +171,7 @@ namespace Client
                 case Flag.joinRoom:
                     break;
                 case Flag.SendMove:
+                    updateBoard(data);
                     break;
                 case Flag.updateBoard:
                     break;      
@@ -203,7 +204,44 @@ namespace Client
 
 
         }
+       private static void updateBoard(List<string> data)
+       {
+            //int[,] tempbaord = new int[GameBoard.rows, GameBoard.columns];
 
+            for (int i = 0; i < data.Count; i++)
+            {
+                var rowstring = data.ElementAt(i);
+                var row = rowstring.Split('+');
+                for (int j = 0; j < row.Length; i++)
+                {
+                    GameBoard.currntGameboard.board[i, j] = int.Parse(row[j]);
+
+                }
+   
+            }
+            GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate () {
+                GameBoard.currntGameboard.repaintBord();
+            }));
+
+
+            //string updateStr = "";
+            //for (int row = 0; row < rows; row++)
+            //{
+            //    updateStr += "[";
+            //    for (int col = 0; col <columns; col++)
+            //    {
+            //        if (col < columns - 1)
+            //            updateStr += board[row, col] + ",";
+            //        else
+            //            updateStr += board[row, col];
+            //    }
+            //    if (row < rows - 1)
+            //        updateStr += "],";
+            //    else
+            //        updateStr += "]";
+            //}
+
+        }
 
         /// <summary>
         ///  Get all the players on the server and return them as an List of Players

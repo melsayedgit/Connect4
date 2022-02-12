@@ -25,6 +25,7 @@ namespace Client
         public Form board;
         public static lobby mainlobby;
         public static GameBoard seegamebaord;
+        public static waiting wait;
 
 
         public lobby()  
@@ -153,6 +154,9 @@ namespace Client
                     if (dg == DialogResult.OK)
                     {
                         GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.PlayerColor.ToString());
+                         wait = new waiting();
+                        wait.Show();
+
                     }
 
                 }
