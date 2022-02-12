@@ -154,6 +154,7 @@ namespace Client
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();
             data.RemoveAt(0);
+
             switch (flag)
             {
                 case Flag.getPlayers:
@@ -188,8 +189,10 @@ namespace Client
 
                 lobby.mainlobby.Hide();
                 lobby.seegamebaord = new GameBoard();
-                GameBoard.columns = int.Parse(sizear[0]);
-                GameBoard.rows = int.Parse(sizear[1]);
+
+                GameBoard.columns = 6;// int.Parse(sizear[0]);
+                GameBoard.rows = 7; //int.Parse(sizear[1]);
+
                 lobby.seegamebaord.Show();
             } ));
 
@@ -299,7 +302,7 @@ namespace Client
      asktoplay = 400,
      waittopaly = 405,
      SendMove = 410,
-     updateBoard =420,
+     updateBoard = 420,
      disconnect = 700
     }
 }

@@ -41,6 +41,7 @@ namespace Client
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "GameBoard";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameBoard_FormClosing);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             this.ResumeLayout(false);

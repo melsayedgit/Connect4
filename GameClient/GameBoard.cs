@@ -16,11 +16,11 @@ namespace Client
         //1)
         private Rectangle[] boardcolumns;
         //2)
-        private int[,] board;
+        public int[,] board;
         int x;
         int y;
         //3)
-        private int turn;
+        public  int turn; // on login define if Host or Challanger
         //4)
 
         //
@@ -49,7 +49,7 @@ namespace Client
             // width , Heigth
             this.board = new int[rows, columns];//x,y
             //3)
-            this.turn = 1;
+          
             //4)
             // winner = this.winnerplayer(this.turn);
             //5) player*color
@@ -60,9 +60,33 @@ namespace Client
             ChallangerBrush = new SolidBrush(ChallangerColor);
         }
 
+        public void repaintBord()
+        {
+            Graphics g = this.CreateGraphics();
+
+            for (int i = 0; i <rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (board[i,j] == 1)
+                    {
+                        g.FillEllipse(HostBrush, 32 + 48 * j, 32 + 48 * i, 32, 32);
+                    }
+                    else if (board[i, j] == 2)
+                    {
+                        g.FillEllipse(ChallangerBrush, 32 + 48 * j, 32 + 48 * i, 32, 32);
+                    }
+                  
+                }
+            }
+            
+
+        }
+
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.FillRectangle(Brushes.Blue, 24, 24, columns * 48,  rows * 48);//
+
             for (int i = 0; i < rows; i++)//x
             {
                 for (int j = 0; j < columns; j++)//y
@@ -87,18 +111,27 @@ namespace Client
                 int rowindex = this.EmptyRow(columnIndex);
                 if (rowindex != -1)
                 {
-                    this.board[rowindex, columnIndex] = this.turn;
-                    if (this.turn == 1)
+                    this.board[rowindex, columnIndex] = this.turn;  /// مهم اوي حلي بالك من السفر 
+                    GameManger.SendServerRequest(Flag.SendMove, columnIndex.ToString(), rowindex.ToString());
+
+                    if (this.turn == 1) //cuurnt player 
                     {
                         //User One use Host Color 
-                        Graphics g = this.CreateGraphics();
-                        g.FillEllipse(HostBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                        //Graphics g = this.CreateGraphics();
+                        //g.FillEllipse(HostBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+
+                        repaintBord();
+                            
+
                     }
+
+
                     else if (this.turn == 2)
                     {
                         //User two use DarkGreen Color 
-                        Graphics g = this.CreateGraphics();
-                        g.FillEllipse(ChallangerBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                        //Graphics g = this.CreateGraphics();
+                        //g.FillEllipse(ChallangerBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                        repaintBord();
                     }
 
                     //***************Winner***********
@@ -233,5 +266,9 @@ namespace Client
 
         }
 
+        private void GameBoard_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            (this.Parent as lobby).Show();
+        }
     }
 }
