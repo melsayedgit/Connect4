@@ -20,7 +20,7 @@ namespace Client
         int x;
         int y;
         //3)
-        public  int turn; // on login define if Host or Challanger
+        public static int turn; // on login define if Host or Challanger
         //4)
 
         //
@@ -83,6 +83,8 @@ namespace Client
 
         }
 
+
+
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.FillRectangle(Brushes.Blue, 24, 24, columns * 48,  rows * 48);//
@@ -111,10 +113,10 @@ namespace Client
                 int rowindex = this.EmptyRow(columnIndex);
                 if (rowindex != -1)
                 {
-                    this.board[rowindex, columnIndex] = this.turn;  /// مهم اوي حلي بالك من السفر 
+                    this.board[rowindex, columnIndex] = turn;  /// مهم اوي حلي بالك من السفر 
                     GameManger.SendServerRequest(Flag.SendMove, columnIndex.ToString(), rowindex.ToString());
 
-                    if (this.turn == 1) //cuurnt player 
+                    if (turn == 1) //cuurnt player 
                     {
                         //User One use Host Color 
                         //Graphics g = this.CreateGraphics();
@@ -126,7 +128,7 @@ namespace Client
                     }
 
 
-                    else if (this.turn == 2)
+                    else if (turn == 2)
                     {
                         //User two use DarkGreen Color 
                         //Graphics g = this.CreateGraphics();
@@ -135,7 +137,7 @@ namespace Client
                     }
 
                     //***************Winner***********
-                    int winner = this.winnerplayer(this.turn);
+                    int winner = this.winnerplayer(turn);
 
                     if (winner != -1)//There is a winning player
                     {
@@ -150,13 +152,13 @@ namespace Client
                     }
 
                     // change 1=>2 && 2=>1
-                    if (this.turn == 1)
+                    if (turn == 1)
                     {
-                        this.turn = 2;
+                        turn = 2;
                     }
                     else
                     {
-                        this.turn = 1;
+                        turn = 1;
                     }
                 }
             }
@@ -268,7 +270,7 @@ namespace Client
 
         private void GameBoard_FormClosing(object sender, FormClosingEventArgs e)
         {
-            (this.Parent as lobby).Show();
+            lobby.mainlobby.Show();
         }
     }
 }

@@ -192,9 +192,10 @@ namespace Client
                     );
                 GameBoard.rows = board_width;
                 GameBoard.columns = board_hight;
-
                 GameBoard.HostColor = create_room.Selected_color1;
                 GameBoard.ChallangerColor = Color.Purple;
+                GameBoard.turn = 1;
+
                 board = new GameBoard();
                 board.Show();
 

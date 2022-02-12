@@ -188,11 +188,14 @@ namespace Client
             lobby.mainlobby.Invoke(new MethodInvoker(delegate () {
 
                 lobby.mainlobby.Hide();
+
+                GameBoard.columns = int.Parse(sizear[0]);
+                GameBoard.rows = int.Parse(sizear[1]);
+                GameBoard.HostColor = Color.Red;
+                GameBoard.ChallangerColor = Color.Purple;
+                GameBoard.turn = 2;
+
                 lobby.seegamebaord = new GameBoard();
-
-                GameBoard.columns = 6;// int.Parse(sizear[0]);
-                GameBoard.rows = 7; //int.Parse(sizear[1]);
-
                 lobby.seegamebaord.Show();
             } ));
 
@@ -200,6 +203,7 @@ namespace Client
 
 
         }
+
 
         /// <summary>
         ///  Get all the players on the server and return them as an List of Players
