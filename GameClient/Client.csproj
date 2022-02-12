@@ -51,8 +51,11 @@
     <Reference Include="DragAssembly">
       <HintPath>C:\Users\ibrah\Downloads\DragAssembly.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +65,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="createRoom.cs">
@@ -115,6 +119,18 @@
     <Compile Include="spectate.Designer.cs">
       <DependentUpon>spectate.cs</DependentUpon>
     </Compile>
+    <Compile Include="waiting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="waiting.Designer.cs">
+      <DependentUpon>waiting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="winORlose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="winORlose.Designer.cs">
+      <DependentUpon>winORlose.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="createRoom.resx">
       <DependentUpon>createRoom.cs</DependentUpon>
     </EmbeddedResource>
@@ -149,6 +165,12 @@
     <EmbeddedResource Include="spectate.resx">
       <DependentUpon>spectate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="waiting.resx">
+      <DependentUpon>waiting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="winORlose.resx">
+      <DependentUpon>winORlose.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -173,6 +195,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BoilingTenderAruanas-max-1mb.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\win.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lose.jfif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
