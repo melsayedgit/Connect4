@@ -21,6 +21,8 @@ namespace Client
         int y;
         //3)
         public static int turn; // on login define if Host or Challanger
+
+        public static int playerTurn;
         //4)
 
         //
@@ -116,125 +118,138 @@ namespace Client
                 if (rowindex != -1)
                 {
                     this.board[rowindex, columnIndex] = turn;  /// مهم اوي حلي بالك من السفر 
-                    GameManger.SendServerRequest(Flag.SendMove, columnIndex.ToString(), rowindex.ToString());
+                
 
-                    if (turn == 1) //cuurnt player 
+                    if (playerTurn == turn) //cuurnt player 
                     {
-                        //User One use Host Color 
-                        //Graphics g = this.CreateGraphics();
-                        //g.FillEllipse(HostBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                     
 
-                        repaintBord();
-                            
-
-                    }
+                    GameManger.SendServerRequest(Flag.SendMove, rowindex.ToString(), columnIndex.ToString());
+                       // MessageBox.Show(rowindex.ToString(), columnIndex.ToString());
+                      //  repaintBord();
 
 
-                    else if (turn == 2)
-                    {
-                        //User two use DarkGreen Color 
-                        //Graphics g = this.CreateGraphics();
-                        //g.FillEllipse(ChallangerBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
-                        repaintBord();
-                    }
+                        //switch (turn)
+                        //{
+                        //    case 1:
+                        //        turn = 1;
+                        //        break;
+                        //    case 2:
+                        //        turn = 1;
+                        //        break;
+                        //}
 
-                    //***************Winner***********
-                    int winner = this.winnerplayer(turn);
-
-                    if (winner != -1)//There is a winning player
-                    {
-
-                        if (winner == 1)
-                        {
-                            player = "red";
-                        }
-                        else
-                        { player = "DarkGreen"; }
-                        MessageBox.Show(player + "player has win");
-                    }
-
-                    // change 1=>2 && 2=>1
-                    if (turn == 1)
-                    {
-                        turn = 2;
                     }
                     else
                     {
-                        turn = 1;
+                        MessageBox.Show("That is not your turn please wait for the Other player Move");
                     }
+
+                    //else if (turn == 2)
+                    //{
+                    //    //User two use DarkGreen Color 
+                    //    //Graphics g = this.CreateGraphics();
+                    //    //g.FillEllipse(ChallangerBrush, 32 + 48 * columnIndex, 32 + 48 * rowindex, 32, 32);
+                    //    repaintBord();
+                    //}
+
+                    //***************Winner***********
+                    //int winner = this.winnerplayer(turn);
+
+                    //if (winner != -1)//There is a winning player
+                    //{
+
+                    //    if (winner == 1)
+                    //    {
+                    //        player = "red";
+                    //    }
+                    //    else
+                    //    { player = "DarkGreen"; }
+                    //    MessageBox.Show(player + "player has win");
+                    //}
+
+                    // change 1=>2 && 2=>1
+                    //if (turn == 1)
+                    //{
+                    //    turn = 2;
+                    //}
+                    //else
+                    //{
+                    //    turn = 1;
+                    //}
                 }
             }
         }
         // Winner conditions:
-        private int winnerplayer(int Checkplayer)
-        {
-            //1)Vertical
-            for (int row = 0; row < this.board.GetLength(0) - 3; row++)
-            {
-                for (int colum = 0; colum < this.board.GetLength(1); colum++)
-                {
-                    //check if the winner get 4 point vertically 
-                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum], this.board[row + 2, colum], this.board[row + 3, colum]))
-                    {
-                        //if True
-                        return Checkplayer;
-                    }
-                }
-            }
-            //2)Horizontal
-            for (int row = 0; row < this.board.GetLength(0); row++)
-            {
-                for (int colum = 0; colum < this.board.GetLength(1) - 3; colum++)
-                {
-                    //check if the winner get 4 point Horizontal 
-                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row, colum + 1], this.board[row, colum + 2], this.board[row, colum + 3]))
-                    {
-                        //if True
-                        return Checkplayer;
-                    }
-                }
-            }
-            //3)top-left diagonal(\)
-            for (int row = 0; row < this.board.GetLength(0) - 3; row++)
-            {
-                for (int colum = 0; colum < this.board.GetLength(1) - 3; colum++)
-                {
-                    //check if the winner get 4 point Horizontal 
-                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum + 1], this.board[row + 2, colum + 2], this.board[row + 3, colum + 3]))
-                    {
-                        //if True
-                        return Checkplayer;
-                    }
-                }
-            }
-            //4)top-right diagonal(/)
-            for (int row = 0; row < this.board.GetLength(0) - 3; row++)
-            {
-                for (int colum = 3; colum < this.board.GetLength(1); colum++)
-                {
-                    //check if the winner get 4 point Horizontal 
-                    if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum - 1], this.board[row + 2, colum - 2], this.board[row + 3, colum - 3]))
-                    {
-                        //if True
-                        return Checkplayer;
-                    }
-                }
-            }
+        //private int winnerplayer(int Checkplayer)
+        //{
+        //    //1)Vertical
+        //    for (int row = 0; row < this.board.GetLength(0) - 3; row++)
+        //    {
+        //        for (int colum = 0; colum < this.board.GetLength(1); colum++)
+        //        {
+        //            //check if the winner get 4 point vertically 
+        //            if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum], this.board[row + 2, colum], this.board[row + 3, colum]))
+        //            {
+        //                //if True
+        //                return Checkplayer;
+        //            }
+        //        }
+        //    }
+        //    //2)Horizontal
+        //    for (int row = 0; row < this.board.GetLength(0); row++)
+        //    {
+        //        for (int colum = 0; colum < this.board.GetLength(1) - 3; colum++)
+        //        {
+        //            //check if the winner get 4 point Horizontal 
+        //            if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row, colum + 1], this.board[row, colum + 2], this.board[row, colum + 3]))
+        //            {
+        //                //if True
+        //                return Checkplayer;
+        //            }
+        //        }
+        //    }
+        //    //3)top-left diagonal(\)
+        //    for (int row = 0; row < this.board.GetLength(0) - 3; row++)
+        //    {
+        //        for (int colum = 0; colum < this.board.GetLength(1) - 3; colum++)
+        //        {
+        //            //check if the winner get 4 point Horizontal 
+        //            if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum + 1], this.board[row + 2, colum + 2], this.board[row + 3, colum + 3]))
+        //            {
+        //                //if True
+        //                return Checkplayer;
+        //            }
+        //        }
+        //    }
+        //    //4)top-right diagonal(/)
+        //    for (int row = 0; row < this.board.GetLength(0) - 3; row++)
+        //    {
+        //        for (int colum = 3; colum < this.board.GetLength(1); colum++)
+        //        {
+        //            //check if the winner get 4 point Horizontal 
+        //            if (this.AllNumber(Checkplayer, this.board[row, colum], this.board[row + 1, colum - 1], this.board[row + 2, colum - 2], this.board[row + 3, colum - 3]))
+        //            {
+        //                //if True
+        //                return Checkplayer;
+        //            }
+        //        }
+        //    }
 
-            return -1;
-        }
-        //function to check all number is checked 
-        private bool AllNumber(int tocheck, params int[] numbers)
-        {
-            foreach (int num in numbers)
-            {
-                if (num != tocheck) //check if the player get 4 point 
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        //    return -1;
+        //}
+        ////function to check all number is checked 
+        //private bool AllNumber(int tocheck, params int[] numbers)
+        //{
+        //    foreach (int num in numbers)
+        //    {
+        //        if (num != tocheck) //check if the player get 4 point 
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         //function 
 

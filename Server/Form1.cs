@@ -252,7 +252,7 @@ namespace serverAppConnect4
             room currentRoom = moveSender.MyRoom;
             //change the room player turn & change the fill board according to the player turn
             currentRoom.Board[x, y] = (currentRoom.PlayerTurn == 1) ? 1 : 2;
-            currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
+           currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
             //update the room board and send it to all the room players
             updateBoared(currentRoom);
             int winnerPlayer = currentRoom.checkWin(currentRoom.PlayerTurn);
@@ -261,11 +261,11 @@ namespace serverAppConnect4
                 endGame(moveSender);
                 MessageBox.Show($"{moveSender.Name} has won the game");
             }
-            else
-            {
-                //change the room player turn
-                currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
-            }
+            //else
+            //{
+            //    //change the room player turn
+            //    currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
+            //}
         }
         //update the Board in all the room members 
         public static void updateBoared(room currentRoom)

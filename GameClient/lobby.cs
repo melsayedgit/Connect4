@@ -199,6 +199,7 @@ namespace Client
                 GameBoard.HostColor = create_room.Selected_color1;
                 GameBoard.ChallangerColor = Color.Purple;
                 GameBoard.turn = 1;
+                GameBoard.playerTurn = 1;
 
                 board = new GameBoard();
                 board.Show();

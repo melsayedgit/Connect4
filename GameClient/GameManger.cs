@@ -173,6 +173,8 @@ namespace Client
                 case Flag.joinRoom:
                     break;
                 case Flag.SendMove:
+                    GameBoard.turn = int.Parse(data.ElementAt(0));
+                    data.RemoveAt(0);
                     updateBoard(data);
                     break;
                 case Flag.updateBoard:
@@ -224,7 +226,8 @@ namespace Client
                     GameBoard.rows = int.Parse(sizear[0]);
                     GameBoard.HostColor = Color.Red;
                     GameBoard.ChallangerColor = Color.Purple;
-                    GameBoard.turn = 2;
+                    GameBoard.turn = 1;
+                    GameBoard.playerTurn = 2;
 
                     lobby.seegamebaord = new GameBoard();
                     lobby.seegamebaord.Show();
@@ -239,14 +242,18 @@ namespace Client
             {
                 var rowstring = data.ElementAt(i);
                 var row = rowstring.Split('+');
-                for (int j = 0; j < row.Length; i++)
+                for (int j = 0; j < row.Length; j++)
                 {
+
                     GameBoard.currntGameboard.board[i, j] = int.Parse(row[j]);
+                    //GameBoard.currntGameboard.board[i, j] = int.Parse(row[j]);
 
                 }
-   
+             
             }
+
             GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate () {
+
                 GameBoard.currntGameboard.repaintBord();
             }));
 
