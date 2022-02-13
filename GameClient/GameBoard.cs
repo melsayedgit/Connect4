@@ -40,7 +40,8 @@ namespace Client
          public static Color ChallangerColor; 
          public static Brush HostBrush;
          public static Brush ChallangerBrush;
-        public static GameBoard currntGameboard;
+         public static GameBoard currntGameboard;
+         public static winORlose winandlose;
 
 
         public GameBoard()

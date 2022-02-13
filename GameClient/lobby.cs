@@ -26,6 +26,7 @@ namespace Client
         public static lobby mainlobby;
         public static GameBoard seegamebaord;
         public static waiting wait;
+     
 
 
         public lobby()  

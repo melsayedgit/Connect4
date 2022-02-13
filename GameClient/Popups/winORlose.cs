@@ -14,15 +14,17 @@ namespace Client
 
     public partial class winORlose : Form
     {
-        public int result =0;
+        public static  int result;
+        public static string winner;
         public winORlose()
         {
+
             InitializeComponent();
             ShowWinner();
         }
         public void ShowWinner()
         {
-            if (result==1)
+            if (result == 1)
             {
                 label1.Text = "Congratulations you Won the Game";
                 pictureBox1.Image = global::Client.Properties.Resources.win;
@@ -33,11 +35,27 @@ namespace Client
                 pictureBox1.Image = global::Client.Properties.Resources.lose;
 
             }
+
+            else if (result == -1)
+            {
+                label1.Text = $"Game Over and {winner} was the Winner";
+                pictureBox1.Image = global::Client.Properties.Resources.win;
+
+            }
         }
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            this.Close();
+            GameManger.SendServerRequest(Flag.playAgain, "0");
+
+            DialogResult = DialogResult.Cancel;
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            GameManger.SendServerRequest(Flag.playAgain, "1");
+            DialogResult = DialogResult.OK;
+            
         }
     }
 }

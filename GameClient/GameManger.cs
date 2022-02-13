@@ -186,12 +186,50 @@ namespace Client
                     GameBoard.ChallangerBrush = new SolidBrush(GameBoard.ChallangerColor);
                     // MessageBox.Show("the color is:" + GameBoard.ChallangerColor);
                     break;
+                case Flag.gameResult:
+                    showWinningMesg(data);
+                        break;
                 default:
                     break;
             }
           //  MessageBox.Show(msg);
             ReceiveServerRequest();
 
+        }
+
+        private static void showWinningMesg(List<string> data)
+        {
+
+            switch (data[0])
+            {
+                case "0":
+                    GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate ()
+                    {
+                        winORlose.result = 0;
+                        GameBoard.winandlose = new winORlose();
+                        GameBoard.winandlose.ShowDialog();
+                    }));
+                    break;
+                case "1":
+                    GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate ()
+                    {
+                        winORlose.result = 1;
+                        GameBoard.winandlose = new winORlose();
+                        GameBoard.winandlose.ShowDialog();
+                    }));
+                    break;
+                case "-1":
+                    GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate ()
+                    {
+                        winORlose.result = 1;
+                        winORlose.winner = data[1];
+                        GameBoard.winandlose = new winORlose();
+                        GameBoard.winandlose.ShowDialog();
+                    }));
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static void acceptTheChallenger(string data)
@@ -382,6 +420,9 @@ namespace Client
      waittopaly = 405,
      SendMove = 410,
      updateBoard = 420,
+     gameResult =500,
+     playAgain =600,
      disconnect = 700
+
     }
 }
