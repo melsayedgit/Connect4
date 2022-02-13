@@ -221,7 +221,7 @@ namespace serverAppConnect4
             else
             {
                 //the room owner refused 
-                askingPlayer.Bw.Write("405,0");
+                askingPlayer.Bw.Write("405,0,0,0");
                 //remove the room refrence from the player
                 askingPlayer.MyRoom = null;
                 //restore the player's score to 0
@@ -259,7 +259,7 @@ namespace serverAppConnect4
             if (winnerPlayer == 1 || winnerPlayer == 2)
             {
                 endGame(moveSender);
-                MessageBox.Show($"{moveSender.Name} has won the game");
+                //MessageBox.Show($"{moveSender.Name} has won the game");
             }
         }
         //update the Board in all the room members 
@@ -316,7 +316,7 @@ namespace serverAppConnect4
                 }
                 else
                 {
-                    currentPlayer.Bw.Write("500,-1");
+                    currentPlayer.Bw.Write("500,-1," + winner.Name);
                 }
             }
         }
