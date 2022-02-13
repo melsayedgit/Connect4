@@ -147,7 +147,7 @@ namespace Client
             }
             else
             {
-                if (GameManger.Rommslist[selected.ElementAt(0)].challenger == null)  
+                if (GameManger.Rommslist[selected.ElementAt(0)].challenger == null)//&& !GameManger.Rommslist[selected.ElementAt(0)].occupied  
                 {
                     GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
                     join_game = new choosecolor();
@@ -159,15 +159,20 @@ namespace Client
                         wait.Show();
 
                     }
-
+                    //GameManger.Rommslist[selected.ElementAt(0)].occupied = true;
                 }
                 else
                 {
-                    GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
-                    MessageBox.Show(selected.ElementAt(0).ToString());
+                    //GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
+                    //MessageBox.Show(selected.ElementAt(0).ToString() + "you are inspectator");
                     join_spectate = new spectate();
+                    var dg = join_spectate.ShowDialog();
                     join_spectate.Show();
+                    if (dg == DialogResult.OK)
+                    {
+                        GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
 
+                    }
                 }
 
 

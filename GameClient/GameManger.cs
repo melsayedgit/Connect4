@@ -38,7 +38,7 @@ namespace Client
 
      public static Player CurrentPlayer;
      public static Room CurrentRoom;
-    
+
      
 
         static GameManger()
@@ -166,6 +166,7 @@ namespace Client
                     Rommslist = GetRooms(data);
                     break;
                 case Flag.waittopaly:
+                    //care if the owner refused he return 405,0 so it throws exception 
                     playgame(data.ElementAt(0), data.ElementAt(1), data.ElementAt(2)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
                     break;
                 case Flag.createRoom:
@@ -401,6 +402,7 @@ namespace Client
 
         public Player challenger { get; set; }
         public Player[] inspectors { get; set; }
+        public  bool occupied = false;
 
         public Room(string name ,Player host)
         {
