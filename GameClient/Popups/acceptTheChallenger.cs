@@ -14,10 +14,12 @@ namespace Client.Popups
     {
         public string challengerLabel { get { return challengerName.Text; } set { challengerName.Text = value; } }
 
+
         public acceptTheChallenger()
         {
             InitializeComponent();
         }
+        
 
         private void okBtn_Click(object sender, EventArgs e)
         {

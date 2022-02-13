@@ -141,7 +141,8 @@ namespace Client
             }
             else
             {
-                MessageBox.Show("the name is already taking please use another one");
+                MessageBox.Show("Name already taken");
+     
                 return false;
             }
         }
@@ -191,10 +192,10 @@ namespace Client
         private static void acceptTheChallenger(string data)
         {
             //pop up a menu asking the room owner if he wants the challenger to play or not
-            MessageBox.Show("do you want to accept the challenger?");
+            
             acceptTheChallenger dlg = new acceptTheChallenger();
             string[] arr = data.Split('+');
-            dlg.challengerLabel = $"{arr[0]} wants to challenge you to play, \nhis color is{arr[1]}";
+            dlg.challengerLabel = $"{arr[0]} wants to challange you ";
             DialogResult ownerResponse = dlg.ShowDialog();
             //if the owner accepts
             if (ownerResponse == DialogResult.OK)
@@ -216,9 +217,11 @@ namespace Client
                 {
                     lobby.wait.Close();
                     //lobby.mainlobby.Hide();
-                    MessageBox.Show("the owner has accepted you!");
-                    GameBoard.columns = int.Parse(sizear[0]);
-                    GameBoard.rows = int.Parse(sizear[1]);
+                    message ms = new message();
+                    ms.msg = "the owner has accepted you!";
+                    DialogResult res = ms.ShowDialog();
+                    GameBoard.columns = int.Parse(sizear[1]);
+                    GameBoard.rows = int.Parse(sizear[0]);
                     GameBoard.HostColor = Color.Red;
                     GameBoard.ChallangerColor = Color.Purple;
                     GameBoard.turn = 2;
