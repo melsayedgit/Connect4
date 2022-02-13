@@ -166,7 +166,7 @@ namespace Client
                     Rommslist = GetRooms(data);
                     break;
                 case Flag.waittopaly:
-                    playgame(data.ElementAt(0), data.ElementAt(1)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
+                    playgame(data.ElementAt(0), data.ElementAt(1), data.ElementAt(2)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
                     break;
                 case Flag.createRoom:
                     break;
@@ -182,6 +182,9 @@ namespace Client
                 case Flag.asktoplay:
                     //"400, askingPlayer.Name + askingPlayer.Color"
                     acceptTheChallenger(data[0]);
+                    GameBoard.ChallangerColor = Color.FromArgb(Int32.Parse(data[0].Split('+')[1]));
+                    GameBoard.ChallangerBrush = new SolidBrush(GameBoard.ChallangerColor);
+                    // MessageBox.Show("the color is:" + GameBoard.ChallangerColor);
                     break;
                 default:
                     break;
@@ -210,7 +213,7 @@ namespace Client
             }
         }
 
-        private static void playgame(string response, string size)
+        private static void playgame(string response, string size,string hostcolor)
         {
             if (int.Parse(response) == 1)
             {
@@ -224,8 +227,8 @@ namespace Client
                     DialogResult res = ms.ShowDialog();
                     GameBoard.columns = int.Parse(sizear[1]);
                     GameBoard.rows = int.Parse(sizear[0]);
-                    GameBoard.HostColor = Color.Red;
-                    GameBoard.ChallangerColor = Color.Purple;
+                    GameBoard.HostColor = Color.FromArgb(Int32.Parse(hostcolor));
+                    GameBoard.ChallangerColor = CurrentPlayer.PlayerColor;
                     GameBoard.turn = 1;
                     GameBoard.playerTurn = 2;
 

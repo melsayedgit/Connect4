@@ -153,7 +153,7 @@ namespace Client
                     var dg = join_game.ShowDialog();
                     if (dg == DialogResult.OK)
                     {
-                        GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.Name ,GameManger.CurrentPlayer.PlayerColor.ToString());
+                        GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.Name ,GameManger.CurrentPlayer.PlayerColor.ToArgb().ToString());
                          wait = new waiting();
                         wait.Show();
 
@@ -191,7 +191,7 @@ namespace Client
                 board_hight = create_room.board_hight;
            
                 GameManger.SendServerRequest(Flag.createRoom,
-                    GameManger.CurrentPlayer.Name+"+"+GameManger.CurrentPlayer.PlayerColor.ToString(),
+                    GameManger.CurrentPlayer.Name+"+"+GameManger.CurrentPlayer.PlayerColor.ToArgb().ToString(),
                      Roomname_new, board_width.ToString() +"+"+ board_hight.ToString()
                     );
                 GameBoard.rows = board_width;

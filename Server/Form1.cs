@@ -289,7 +289,7 @@ namespace serverAppConnect4
             {
                 p.Bw.Write(updateStr);
             }
-            MessageBox.Show("boared updated!\n" + updateStr);
+           // MessageBox.Show("boared updated!\n" + updateStr);
         }
         //End game if a player has won in this move
         public static void endGame(player winner)
@@ -571,7 +571,7 @@ namespace serverAppConnect4
                         }
                         break;
                     case "400":
-                        color = arr[1];
+                        color = arr[2];
                         Server.askToPlay(this, color);
                         break;
                     case "405":
