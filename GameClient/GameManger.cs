@@ -31,7 +31,7 @@ namespace Client
       static  NetworkStream ConnectionStream;
       static  BinaryReader br;
       static  BinaryWriter bwr;
-      static Task recieve;
+      public static Task recieve;
 
      public static List<Player> playerslist;
      public static List<Room> Rommslist;
@@ -130,10 +130,7 @@ namespace Client
             if (data.ElementAt(0) == "1")
             {
                 UserName = userName;
-                recieve = new Task(ReceiveServerRequest);
-                recieve.Start();
-                SendServerRequest(Flag.getPlayers);
-                SendServerRequest(Flag.getRooms);
+
 
                 connStatues = true;
 
@@ -151,7 +148,8 @@ namespace Client
         public static void ReceiveServerRequest()
         {
             var msg = br.ReadString();
-            MessageBox.Show(msg);
+           // MessageBox.Show(msg);
+ 
             var msgArray = msg.Split(',');
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();

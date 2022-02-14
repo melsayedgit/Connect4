@@ -40,22 +40,37 @@ namespace Client
             {
                 label1.Text = $"Game Over and {winner} was the Winner";
                 pictureBox1.Image = global::Client.Properties.Resources.win;
-
+                button1.Text = "Watch Next Game"; 
             }
         }
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            GameManger.SendServerRequest(Flag.playAgain, "0");
+            if (result == -1)
+            {
+                //(this.Parent as GameBoard).Close();
+                GameBoard.currntGameboard.Close();
+              
+            }
+            else
+            {
+                GameManger.SendServerRequest(Flag.playAgain, "0");
 
-            DialogResult = DialogResult.Cancel;
+                DialogResult = DialogResult.Cancel;
+            }
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            GameManger.SendServerRequest(Flag.playAgain, "1");
-            DialogResult = DialogResult.OK;
-            
+            if (result == -1)
+            {
+                this.Close();
+            }
+            else
+            {
+                GameManger.SendServerRequest(Flag.playAgain, "1");
+                DialogResult = DialogResult.OK;
+            }
         }
     }
 }
