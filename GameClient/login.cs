@@ -47,25 +47,36 @@ namespace Client
                         MessageBox.Show("The Server is Offline please try again later");
 
                     }
-
-                    if (GameManger.isloginSuc(playername))
+                    try
                     {
-                        start_lobby = new lobby();
-                        start_lobby.Show();
-                        this.Hide();
+                        if (GameManger.isloginSuc(playername))
+                        {
+                            start_lobby = new lobby();
+                            start_lobby.Show();
+                            this.Hide();
+                        }
+
+
+                        else
+                        {
+                            GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
+                            if (GameManger.isloginSuc(playername))
+                            {
+                                start_lobby = new lobby();
+                                start_lobby.Show();
+                                this.Hide();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                   
                     }
 
+
                 }
-                else
-                {
-                    GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
-                    if (GameManger.isloginSuc(playername))
-                    {
-                        start_lobby = new lobby();
-                        start_lobby.Show();
-                        this.Hide();
-                    }
-                }
+ 
             }
 
             
@@ -83,19 +94,49 @@ namespace Client
                 {
                     playername = textBox1.Text;
 
-
-                    try
+                    if (firstlogin)
                     {
-                        GameManger.Login(playername);
+                        try
+                        {
+                            GameManger.Login(playername);
+                            firstlogin = false;
+                            //start_lobby = new lobby();
+                            //start_lobby.Show();
+                            //this.Hide();
+                        }
 
-                        start_lobby = new lobby();
-                        start_lobby.Show();
-                        this.Hide();
+                        catch (Exception)
+                        {
+                            MessageBox.Show("The Server is Offline please try again later");
 
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The Server is Offline please try again later");
+                        }
+                        try
+                        {
+                            if (GameManger.isloginSuc(playername))
+                            {
+                                start_lobby = new lobby();
+                                start_lobby.Show();
+                                this.Hide();
+                            }
+
+
+                            else
+                            {
+                                GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
+                                if (GameManger.isloginSuc(playername))
+                                {
+                                    start_lobby = new lobby();
+                                    start_lobby.Show();
+                                    this.Hide();
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+
+                        }
+
 
                     }
 
@@ -137,11 +178,20 @@ namespace Client
 
         private void Login_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (GameManger.connStatues)
+
+
+            try
             {
-                GameManger.SendServerRequest(Flag.disconnect, "");
+                if (GameManger.connStatues)
+                {
+                    GameManger.SendServerRequest(Flag.disconnect, "");
+                }
             }
-        
+            catch (Exception)
+            {
+
+
+            }
         }
         // end code of dragable form
     }

@@ -130,7 +130,16 @@ namespace Client
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
         {
-            GameManger.SendServerRequest(Flag.disconnect, "");
+            try
+            {
+                GameManger.SendServerRequest(Flag.disconnect, "");
+            }
+            catch (Exception)
+            {
+
+
+            }
+        
             Application.Exit();
         }
 

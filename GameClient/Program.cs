@@ -25,9 +25,18 @@ namespace Client
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
             if (GameManger.connStatues)
-            { 
+            {
 
-                GameManger.SendServerRequest(Flag.disconnect, "");
+                try
+                {
+                    GameManger.SendServerRequest(Flag.disconnect, "");
+                }
+                catch (Exception)
+                {
+
+                   
+                }
+                
             }
         }
     }

@@ -151,7 +151,7 @@ namespace Client
         public static void ReceiveServerRequest()
         {
             var msg = br.ReadString();
-            MessageBox.Show(msg);
+           // MessageBox.Show(msg);
             var msgArray = msg.Split(',');
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();
