@@ -176,12 +176,13 @@ namespace serverAppConnect4
                 //check if the player is gonna be playing or watching
                 if (requestedRoom.RoomPlayers.Count == 1)
                 {
+                    //the player has joined the room as a player
                     //the player will play
                     askingPlayer.IsPlaying = true;
                     requestedRoom.RoomPlayers.Add(askingPlayer);
                     //requestedRoom.RoomPlayers[0].Bw.Write(askingPlayer.Name + " has joined");
                     askingPlayer.MyRoom = requestedRoom;
-                    retVal = 1;
+                    askingPlayer.Bw.Write("320,1");
                 }
                 else
                 {
@@ -189,10 +190,12 @@ namespace serverAppConnect4
                     requestedRoom.RoomPlayers.Add(askingPlayer);
                     askingPlayer.MyRoom = requestedRoom;
                     retVal = 2;
+                    askingPlayer.Bw.Write($"320,2,{requestedRoom.RoomPlayers[0].Color},{requestedRoom.RoomPlayers[1].Color},{requestedRoom.Rows}+{requestedRoom.Cols}");
                 }
             }
             return retVal;
         }
+
 
         //ask the room owner to play
         public static void askToPlay(player askingPlayer, string Color)
@@ -252,14 +255,14 @@ namespace serverAppConnect4
             room currentRoom = moveSender.MyRoom;
             //change the room player turn & change the fill board according to the player turn
             currentRoom.Board[x, y] = (currentRoom.PlayerTurn == 1) ? 1 : 2;
-            currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
-            //update the room board and send it to all the room players
             int winnerPlayer = currentRoom.checkWin(currentRoom.PlayerTurn);
             if (winnerPlayer == 1 || winnerPlayer == 2)
             {
                 endGame(moveSender);
                 //MessageBox.Show($"{moveSender.Name} has won the game");
             }
+            currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
+            //update the room board and send it to all the room players
             updateBoared(currentRoom);
         }
         //update the Board in all the room members 
@@ -319,8 +322,18 @@ namespace serverAppConnect4
                     currentPlayer.Bw.Write("500,-1," + winner.Name);
                 }
             }
+            //clearing the room board
+            for(int i=0;i<currentRoom.Board.GetLength(0);i++)
+            {
+                for (int j = 0; j < currentRoom.Board.GetLength(0); j++)
+                {
+                    currentRoom.Board[i, j] = 0;
+                }
+            }
+            //return the turn to the winning player if they played again
+            currentRoom.PlayerTurn = (currentRoom.PlayerTurn == 1) ? 2 : 1;
         }
-        
+
 
         //play again after one has win or lose and save the score to the server text file
         public static void playAgain(player moveSender, int PlayAgain)
@@ -351,7 +364,8 @@ namespace serverAppConnect4
                         //check the guest
                         if (guestPlayer.PlayAgain)//the guest wants to play also
                         {
-                            waitToPlay(moveSender, 1);
+                            //waitToPlay(moveSender, 1);
+                            Server.updateBoared(currentRoom);
                         }
                         else//the guest doesn't want to play so kick him out
                         {
@@ -376,7 +390,8 @@ namespace serverAppConnect4
                         //check the guest
                         if (roomOwner.PlayAgain)//the room owner wants to play also
                         {
-                            waitToPlay(moveSender, 1);
+                            //waitToPlay(moveSender, 1);
+                            Server.updateBoared(currentRoom);
                         }
                         else//the room owner doesn't want to play so kick the guest out
                         {
@@ -499,7 +514,7 @@ namespace serverAppConnect4
         public Task PlayerThread { get { return playerThread; } set { playerThread = value; } }
 
 
-
+        //handling each player according to the received requests
         public void playerHandling()
         {
             if (ct.IsCancellationRequested)
@@ -549,17 +564,7 @@ namespace serverAppConnect4
                         //320,roomname
                         string RoomName = arr[1];
                         int isJoined = Server.joinRoom(this, RoomName);
-                        if (isJoined == 1)
-                        {
-                            //the player has joined the room as a player
-                            bw.Write("320,1");
-                        }
-                        else if (isJoined == 2)
-                        {
-                            //the player has joined the room as a spectator
-                            bw.Write("320,2");
-                        }
-                        else
+                        if(isJoined == -1)
                         {
                             //the player hasn't joined the room
                             bw.Write("320,-1");
@@ -572,14 +577,14 @@ namespace serverAppConnect4
                     case "405":
                         int responseToPlay = int.Parse(arr[1]);
                         int response = Server.waitToPlay(this, responseToPlay);
-                        if (response == 1)
-                        {
-                            //MessageBox.Show("game started");
-                        }
-                        else
-                        {
-                            //MessageBox.Show("player 1 still waiting");
-                        }
+                        //if (response == 1)
+                        //{
+                        //    //MessageBox.Show("game started");
+                        //}
+                        //else
+                        //{
+                        //    //MessageBox.Show("player 1 still waiting");
+                        //}
                         break;
                     case "410":
                         Server.sendMove(this, int.Parse(arr[1]), int.Parse(arr[2]));
