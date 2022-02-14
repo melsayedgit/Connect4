@@ -37,7 +37,7 @@ namespace Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 592);
+            this.ClientSize = new System.Drawing.Size(714, 650);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "GameBoard";
             this.Text = "Game Board";

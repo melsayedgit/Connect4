@@ -56,7 +56,7 @@ namespace Client
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text==""|| comboBox1.SelectedItem==null || comboBox2.SelectedItem==null)
+            if (textBox1.Text=="")
             {
                 MessageBox.Show("Please Fill Information");
             }

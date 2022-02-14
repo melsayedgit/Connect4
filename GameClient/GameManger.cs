@@ -280,6 +280,14 @@ namespace Client
             if (ownerResponse == DialogResult.OK)
             {
                 SendServerRequest(Flag.waittopaly, "1");
+                lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
+                {
+                    message ms = new message();
+                    ms.msg = $"  You are currently playing against: {arr[0]}";
+                    lobby.wait.Close();
+                    lobby.mainlobby.board.Show();
+
+                }));
             }
             else
             {
@@ -316,11 +324,11 @@ namespace Client
 
             else
             {
-
                 lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
                 {
 
                     lobby.seegamebaord.Close();
+                  MessageBox.Show("am dead");
                 }));
 
             }

@@ -222,7 +222,10 @@ namespace Client
                 GameBoard.playerTurn = 1;
 
                 board = new GameBoard();
-                board.Show();
+                wait = new waiting();
+                wait.msg = "Waiting for somone to join so you can Play :)";
+                wait.Show();
+               
 
             }
 
