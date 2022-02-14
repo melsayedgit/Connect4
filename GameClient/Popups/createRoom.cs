@@ -63,8 +63,8 @@ namespace Client
             else
             {
                 Roomname_new = textBox1.Text;
-                board_hight = int.Parse(comboBox1.Text);
-                board_width = int.Parse(comboBox2.Text);
+                board_hight = int.Parse(comboBox1.Text == "H" ? "6" : comboBox1.Text) ;
+                board_width = int.Parse(comboBox2.Text == "W" ? "7" : comboBox2.Text);
                 GameManger.UpdatePlayer(Selected_color1);
                 this.DialogResult = DialogResult.OK;
 
