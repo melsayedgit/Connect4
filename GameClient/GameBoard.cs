@@ -141,6 +141,10 @@ namespace Client
                         //}
 
                     }
+                   else if (playerTurn == 3) {
+
+                        MessageBox.Show("you are spectating the Game you can't play");
+                    }
                     else
                     {
                         MessageBox.Show("That is not your turn please wait for the Other player Move");

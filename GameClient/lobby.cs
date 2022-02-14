@@ -41,8 +41,8 @@ namespace Client
         }
         private void Lobby_Load(object sender, EventArgs e)
         {
-            showplayer();
-            showroom();
+            //showplayer();
+            //showroom();
         }
 
         public void showplayer()

@@ -151,7 +151,7 @@ namespace Client
         public static void ReceiveServerRequest()
         {
             var msg = br.ReadString();
-         // MessageBox.Show(msg);
+         MessageBox.Show(msg);
             var msgArray = msg.Split(',');
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();
@@ -180,6 +180,11 @@ namespace Client
                 case Flag.createRoom:
                     break;
                 case Flag.joinRoom:
+                    if (data.ElementAt(0) == "2")
+                    {
+                        joinASspectator(data.ElementAt(1), data.ElementAt(2), data.ElementAt(2));
+                    }
+                   
                     break;
                 case Flag.SendMove:
                     GameBoard.turn = int.Parse(data.ElementAt(0));
@@ -204,6 +209,28 @@ namespace Client
           //  MessageBox.Show(msg);
             ReceiveServerRequest();
 
+        }
+
+        private static void joinASspectator(string hostColor,string ChallngerColor,string size)
+        {
+            var sizear = size.Split('+');
+            lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
+            {
+                //lobby.mainlobby.join_spectate.Close();
+              
+                message ms = new message();
+                ms.msg = "YOU ARE NOW SPECTATING THE GAME";
+                DialogResult res = ms.ShowDialog();
+                GameBoard.columns = int.Parse(sizear[1]);
+                GameBoard.rows = int.Parse(sizear[0]);
+                GameBoard.HostColor = Color.FromArgb(Int32.Parse(hostColor));
+                GameBoard.ChallangerColor = Color.FromArgb(Int32.Parse(ChallngerColor));
+                GameBoard.turn = 0;
+                GameBoard.playerTurn = 3;
+
+                lobby.seegamebaord = new GameBoard();
+                lobby.seegamebaord.Show();
+            }));
         }
 
         private static void showWinningMesg(List<string> data)
