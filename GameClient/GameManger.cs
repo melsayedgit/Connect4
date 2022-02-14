@@ -151,7 +151,7 @@ namespace Client
         public static void ReceiveServerRequest()
         {
             var msg = br.ReadString();
-         MessageBox.Show(msg);
+            MessageBox.Show(msg);
             var msgArray = msg.Split(',');
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();
@@ -160,12 +160,13 @@ namespace Client
             switch (flag)
             {
                 case Flag.getPlayers:
-                   playerslist = Getplayers(data);
+                     playerslist = Getplayers(data);
                     lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
                     {
                         lobby.mainlobby.showplayer();
                     }));
                     break;
+
                 case Flag.getRooms:
                     Rommslist = GetRooms(data);
                     lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
@@ -173,6 +174,7 @@ namespace Client
                         lobby.mainlobby.showroom();
                     }));
                     break;
+
                 case Flag.waittopaly:
                     //care if the owner refused he return 405,0 so it throws exception 
                     playgame(data.ElementAt(0), data.ElementAt(1), data.ElementAt(2)); // if 405,1: hide or open gamebaord     else 405,0:close choose color host didnt accpet
@@ -182,7 +184,7 @@ namespace Client
                 case Flag.joinRoom:
                     if (data.ElementAt(0) == "2")
                     {
-                        joinASspectator(data.ElementAt(1), data.ElementAt(2), data.ElementAt(2));
+                        joinASspectator(data.ElementAt(1), data.ElementAt(2), data.ElementAt(3));
                     }
                    
                     break;
@@ -257,7 +259,7 @@ namespace Client
                 case "-1":
                     GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate ()
                     {
-                        winORlose.result = 1;
+                        winORlose.result = -1;
                         winORlose.winner = data[1];
                         GameBoard.winandlose = new winORlose();
                         GameBoard.winandlose.ShowDialog();

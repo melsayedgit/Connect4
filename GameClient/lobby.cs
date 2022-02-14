@@ -181,7 +181,7 @@ namespace Client
                     //MessageBox.Show(selected.ElementAt(0).ToString() + "you are inspectator");
                     join_spectate = new spectate();
                     var dg = join_spectate.ShowDialog();
-                    join_spectate.Show();
+                
                     if (dg == DialogResult.OK)
                     {
                         GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
