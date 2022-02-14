@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Popups;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -157,7 +158,10 @@ namespace Client
            
             if (selected.Count() == 0) //no room selected
             {
-                MessageBox.Show("please select a room before joining");
+                message ms = new message();
+                ms.msg = "please select a room before \n joining";
+                DialogResult res = ms.ShowDialog();
+
             }
             else
             {
@@ -223,7 +227,7 @@ namespace Client
 
                 board = new GameBoard();
                 wait = new waiting();
-                wait.msg = "Waiting for somone to join so you can Play :)";
+                wait.msg = "Waiting for somone to join \n so you can Play :)";
                 wait.Show();
                
 

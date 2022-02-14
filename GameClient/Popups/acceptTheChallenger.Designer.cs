@@ -75,6 +75,7 @@ namespace Client.Popups
             this.challengerName.Size = new System.Drawing.Size(246, 34);
             this.challengerName.TabIndex = 2;
             this.challengerName.Text = "challengerName";
+            this.challengerName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AcceptTheChallenger_MouseDown);
             // 
             // label1
             // 
@@ -87,6 +88,7 @@ namespace Client.Popups
             this.label1.Size = new System.Drawing.Size(455, 46);
             this.label1.TabIndex = 3;
             this.label1.Text = "Accept the challenger?";
+            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AcceptTheChallenger_MouseDown);
             // 
             // acceptTheChallenger
             // 
@@ -103,6 +105,7 @@ namespace Client.Popups
             this.Name = "acceptTheChallenger";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "acceptTheChallenger";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AcceptTheChallenger_MouseDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -219,7 +219,7 @@ namespace Client
                 //lobby.mainlobby.join_spectate.Close();
               
                 message ms = new message();
-                ms.msg = "YOU ARE NOW SPECTATING THE GAME";
+                ms.msg = "YOU ARE NOW SPECTATING \n THE GAME";
                 DialogResult res = ms.ShowDialog();
                 GameBoard.columns = int.Parse(sizear[1]);
                 GameBoard.rows = int.Parse(sizear[0]);

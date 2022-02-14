@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Popups;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -96,7 +97,7 @@ namespace Client
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.OrangeRed, 24, 24, columns * 48,  rows * 48);//
+            e.Graphics.FillRectangle(Brushes.Blue, 24, 24, columns * 48,  rows * 48);//
 
             for (int i = 0; i < rows; i++)//x
             {
@@ -146,12 +147,15 @@ namespace Client
 
                     }
                    else if (playerTurn == 3) {
-
-                        MessageBox.Show("you are spectating the Game you can't play");
+                        message ms = new message();
+                        ms.msg = " you are spectating the Game \n  you can't play";
+                        DialogResult res = ms.ShowDialog();
                     }
                     else
                     {
-                        MessageBox.Show("That is not your turn please wait for the Other player Move");
+                        message ms = new message();
+                        ms.msg = " That is not your turn please \n wait for the Other player Move ";
+                        DialogResult res = ms.ShowDialog();
                     }
 
                     //else if (turn == 2)
@@ -298,5 +302,7 @@ namespace Client
         {
             lobby.mainlobby.Show();
         }
+
+
     }
 }

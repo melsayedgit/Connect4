@@ -41,10 +41,9 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(26)))), ((int)(((byte)(74)))));
-            this.label1.Location = new System.Drawing.Point(9, 24);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(12, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(231, 30);
+            this.label1.Size = new System.Drawing.Size(293, 37);
             this.label1.TabIndex = 0;
             this.label1.Text = "Choose Your Color :";
             // 
@@ -53,10 +52,10 @@
             this.button1.BackColor = System.Drawing.Color.LimeGreen;
             this.button1.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(385, 261);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Location = new System.Drawing.Point(513, 321);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 39);
+            this.button1.Size = new System.Drawing.Size(149, 48);
             this.button1.TabIndex = 1;
             this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = false;
@@ -65,22 +64,22 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.Red;
-            this.button2.Location = new System.Drawing.Point(181, 121);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Location = new System.Drawing.Point(241, 149);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(56, 56);
+            this.button2.Size = new System.Drawing.Size(75, 69);
             this.button2.TabIndex = 2;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Button2_MouseClick);
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.Color.Blue;
-            this.button3.ForeColor = System.Drawing.Color.Blue;
-            this.button3.Location = new System.Drawing.Point(268, 121);
-            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button3.BackColor = System.Drawing.Color.DarkViolet;
+            this.button3.ForeColor = System.Drawing.Color.DarkViolet;
+            this.button3.Location = new System.Drawing.Point(357, 149);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(56, 56);
+            this.button3.Size = new System.Drawing.Size(75, 69);
             this.button3.TabIndex = 3;
             this.button3.Text = "Blue";
             this.button3.UseVisualStyleBackColor = false;
@@ -90,10 +89,10 @@
             // 
             this.button4.BackColor = System.Drawing.Color.DarkGreen;
             this.button4.ForeColor = System.Drawing.Color.MediumSlateBlue;
-            this.button4.Location = new System.Drawing.Point(356, 121);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button4.Location = new System.Drawing.Point(475, 149);
+            this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(56, 56);
+            this.button4.Size = new System.Drawing.Size(75, 69);
             this.button4.TabIndex = 4;
             this.button4.UseVisualStyleBackColor = false;
             this.button4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Button4_MouseClick);
@@ -101,20 +100,20 @@
             // button5
             // 
             this.button5.BackColor = System.Drawing.Color.Yellow;
-            this.button5.Location = new System.Drawing.Point(94, 121);
-            this.button5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button5.Location = new System.Drawing.Point(125, 149);
+            this.button5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(56, 56);
+            this.button5.Size = new System.Drawing.Size(75, 69);
             this.button5.TabIndex = 5;
             this.button5.UseVisualStyleBackColor = false;
             this.button5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Button5_MouseClick);
             // 
             // choosecolor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(534, 328);
+            this.ClientSize = new System.Drawing.Size(712, 404);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -124,7 +123,7 @@
             this.ForeColor = System.Drawing.Color.MediumSeaGreen;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "choosecolor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "player_color";

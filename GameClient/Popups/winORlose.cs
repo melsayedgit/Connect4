@@ -39,7 +39,7 @@ namespace Client
             else if (result == -1)
             {
                 label1.Text = $"Game Over and {winner} was the Winner";
-                pictureBox1.Image = global::Client.Properties.Resources.win;
+                pictureBox1.Image = global::Client.Properties.Resources.watch;
                 button1.Text = "Watch Next Game"; 
             }
         }
@@ -55,7 +55,7 @@ namespace Client
             else
             {
                 GameManger.SendServerRequest(Flag.playAgain, "0");
-
+                GameBoard.currntGameboard.Close();  
                 DialogResult = DialogResult.Cancel;
             }
         }
@@ -71,6 +71,26 @@ namespace Client
                 GameManger.SendServerRequest(Flag.playAgain, "1");
                 DialogResult = DialogResult.OK;
             }
+        }
+
+
+        //drag the borderless form 
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+
         }
     }
 }

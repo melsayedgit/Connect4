@@ -81,14 +81,13 @@
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.Color.Blue;
-            this.button3.ForeColor = System.Drawing.Color.Blue;
+            this.button3.BackColor = System.Drawing.Color.DarkMagenta;
+            this.button3.ForeColor = System.Drawing.Color.DarkViolet;
             this.button3.Location = new System.Drawing.Point(443, 263);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 69);
             this.button3.TabIndex = 9;
-            this.button3.Text = "Blue";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Button3_MouseClick);
             // 

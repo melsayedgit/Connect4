@@ -122,6 +122,11 @@ namespace Client
                             {
                                 start_lobby = new lobby();
                                 start_lobby.Text += "- " + playername;
+                                GameManger.recieve = new Task(GameManger.ReceiveServerRequest);
+                                GameManger.recieve.Start();
+                                GameManger.SendServerRequest(Flag.getPlayers);
+                                GameManger.SendServerRequest(Flag.getRooms);
+
                                 start_lobby.Show();
                                 this.Hide();
                             }

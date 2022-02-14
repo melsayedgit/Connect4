@@ -40,11 +40,12 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(26)))), ((int)(((byte)(74)))));
-            this.label1.Location = new System.Drawing.Point(52, 206);
+            this.label1.Location = new System.Drawing.Point(52, 205);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 37);
             this.label1.TabIndex = 5;
             this.label1.Text = "label1";
+            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
             // 
             // button6
             // 
@@ -76,14 +77,15 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Client.Properties.Resources.win;
-            this.pictureBox1.Location = new System.Drawing.Point(103, 12);
+            this.pictureBox1.Image = global::Client.Properties.Resources.watch;
+            this.pictureBox1.Location = new System.Drawing.Point(103, 11);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(417, 172);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
             // 
             // winORlose
             // 
@@ -100,6 +102,7 @@
             this.Name = "winORlose";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "winORlose";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
