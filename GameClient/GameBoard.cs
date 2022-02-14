@@ -81,7 +81,11 @@ namespace Client
                     {
                         g.FillEllipse(ChallangerBrush, 32 + 48 * j, 32 + 48 * i, 32, 32);
                     }
-                  
+                    else if (board[i, j] == 0)
+                    {
+                        g.FillEllipse(Brushes.White, 32 + 48 * j, 32 + 48 * i, 32, 32);
+                    }
+
                 }
             }
             

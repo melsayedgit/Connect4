@@ -309,6 +309,20 @@ namespace Client
                     lobby.seegamebaord = new GameBoard();
                     lobby.seegamebaord.Show();
                 }));
+
+       
+
+            }
+
+            else
+            {
+
+                lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
+                {
+
+                    lobby.seegamebaord.Close();
+                }));
+
             }
         }
        private static void updateBoard(List<string> data)

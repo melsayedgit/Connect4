@@ -330,7 +330,7 @@ namespace serverAppConnect4
             //clearing the room board
             for(int i=0;i<currentRoom.Board.GetLength(0);i++)
             {
-                for (int j = 0; j < currentRoom.Board.GetLength(0); j++)
+                for (int j = 0; j < currentRoom.Board.GetLength(1); j++)
                 {
                     currentRoom.Board[i, j] = 0;
                 }
@@ -437,9 +437,9 @@ namespace serverAppConnect4
             player.Score = 0;
             currentRoom.RoomPlayers.Remove(player);
             allRooms.Remove(currentRoom);
-            foreach (var player in Allplayers)
+            foreach (var p in Allplayers)
             {
-                player.Bw.Write(getRooms());
+                p.Bw.Write(getRooms());
             }
         }
         //when the player wants to logout of the game
