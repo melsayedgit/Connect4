@@ -52,6 +52,7 @@ namespace Client
                         if (GameManger.isloginSuc(playername))
                         {
                             start_lobby = new lobby();
+                            start_lobby.Text += "- " + playername;
                             start_lobby.Show();
                             this.Hide();
                         }

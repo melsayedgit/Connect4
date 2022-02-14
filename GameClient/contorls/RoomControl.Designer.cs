@@ -59,13 +59,14 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Modern No. 20", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.ForestGreen;
             this.label2.Location = new System.Drawing.Point(323, 64);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 25);
+            this.label2.Size = new System.Drawing.Size(50, 29);
             this.label2.TabIndex = 3;
             this.label2.Text = "1-2";
+            this.label2.Click += new System.EventHandler(this.Label2_Click);
             // 
             // RoomControl
             // 

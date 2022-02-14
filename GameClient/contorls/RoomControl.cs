@@ -16,13 +16,23 @@ namespace Client
        
         public string selected_room;
         private string _roomname;
-        
+        private int _NumberofPlayers;
+
         public string roomname
         {
             get { return _roomname; }
             set { _roomname = value; label1.Text = value; }
         }
+        public int NumberofPlayers
+        {
+            get { return _NumberofPlayers; }
+            set { _NumberofPlayers = value;
+           
+                  label2.Text = value.ToString() + "/2";
+              
 
+                 }
+        }
 
 
         public RoomControl()
@@ -68,6 +78,11 @@ namespace Client
 
             
 
+
+        }
+
+        private void Label2_Click(object sender, EventArgs e)
+        {
 
         }
     }

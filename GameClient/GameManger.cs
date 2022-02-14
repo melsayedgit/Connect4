@@ -151,7 +151,7 @@ namespace Client
         public static void ReceiveServerRequest()
         {
             var msg = br.ReadString();
-           // MessageBox.Show(msg);
+         // MessageBox.Show(msg);
             var msgArray = msg.Split(',');
             Flag flag = (Flag)int.Parse(msgArray[0]);
             var data = msgArray.ToList();
@@ -160,10 +160,18 @@ namespace Client
             switch (flag)
             {
                 case Flag.getPlayers:
-                  playerslist = Getplayers(data);
+                   playerslist = Getplayers(data);
+                    lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
+                    {
+                        lobby.mainlobby.showplayer();
+                    }));
                     break;
                 case Flag.getRooms:
                     Rommslist = GetRooms(data);
+                    lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
+                    {
+                        lobby.mainlobby.showroom();
+                    }));
                     break;
                 case Flag.waittopaly:
                     //care if the owner refused he return 405,0 so it throws exception 
@@ -348,7 +356,14 @@ namespace Client
                 var rom = item.Split('+');
                 var roomName = rom[0];
                 var host = rom[1].Split('-');
-                rooms.Add(new Room(roomName, new Player(host[0])));
+                var addedRoom = new Room(roomName, new Player(host[0]));
+                if (rom.Length == 3)
+                {
+                    addedRoom.challenger = new Player(rom[2].Split('-')[0]);
+                }
+
+                rooms.Add(addedRoom);
+    
             }
             return rooms;
         }
@@ -374,7 +389,7 @@ namespace Client
         {
             
             var currroom = new Room(data[0],new Player(data[1]));
-
+         
 
             return currroom;
         }

@@ -163,7 +163,6 @@
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
             this.timer1.Interval = 3000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
@@ -183,7 +182,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "lobby";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form2";
+            this.Text = "Game Lobby ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Lobby_FormClosing);
             this.Load += new System.EventHandler(this.Lobby_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Lobby_MouseDown);

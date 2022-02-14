@@ -74,6 +74,11 @@ namespace Client
             {
                 roomlist[i] = new RoomControl();
                 roomlist[i].roomname = GameManger.Rommslist[i].Name;
+                if (GameManger.Rommslist[i].challenger !=null)
+                {
+                    roomlist[i].NumberofPlayers = 2;
+                }
+               
                 flowLayoutPanel2.Controls.Add(roomlist[i]);
 
 
