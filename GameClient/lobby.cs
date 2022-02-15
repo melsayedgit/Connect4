@@ -27,7 +27,7 @@ namespace Client
         public static lobby mainlobby;
         public static GameBoard seegamebaord;
         public static waiting wait;
-     
+        public static Room currentroom;
 
 
         public lobby()  
@@ -155,7 +155,7 @@ namespace Client
             var selected = from RoomControl con in cons
                            where con.BackColor == Color.Silver
                            select con.TabIndex;
-           
+            currentroom = GameManger.Rommslist[selected.ElementAt(0)];
             if (selected.Count() == 0) //no room selected
             {
                 message ms = new message();

@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -50,12 +51,21 @@ namespace Client
             {
                 //(this.Parent as GameBoard).Close();
                 GameBoard.currntGameboard.Close();
-              
+
             }
             else
             {
+                //check if the player is the spectator to remove from the list
+                for (var i = 1; i < GameManger.playerslist.Count; i++)
+                {
+                    GameManger.playerslist.RemoveAt(i);
+                }
                 GameManger.SendServerRequest(Flag.playAgain, "0");
-                GameBoard.currntGameboard.Close();  
+                //Thread.Sleep(500);
+                if (GameManger.CurrentRoom.Host.Name != GameManger.CurrentPlayer.Name)//if the spectator close game board
+                {
+                    GameBoard.currntGameboard.Close();
+                }
                 DialogResult = DialogResult.Cancel;
             }
         }

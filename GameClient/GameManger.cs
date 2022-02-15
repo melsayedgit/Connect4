@@ -244,6 +244,8 @@ namespace Client
                         winORlose.result = 0;
                         GameBoard.winandlose = new winORlose();
                         GameBoard.winandlose.ShowDialog();
+
+                        
                     }));
                     break;
                 case "1":
@@ -252,6 +254,7 @@ namespace Client
                         winORlose.result = 1;
                         GameBoard.winandlose = new winORlose();
                         GameBoard.winandlose.ShowDialog();
+                       
                     }));
                     break;
                 case "-1":
@@ -350,12 +353,17 @@ namespace Client
                 }
              
             }
+            //check if the game board is shown so it is updated,
+            //as when a player send that he doesnot want to play again
+            //and the game board panel is closed it doesnot throw an exception
+            if (GameBoard.currntGameboard.Visible)
+            {
+                GameBoard.currntGameboard.BeginInvoke(new MethodInvoker(delegate () {
 
-            GameBoard.currntGameboard.Invoke(new MethodInvoker(delegate () {
+                    GameBoard.currntGameboard.repaintBord();
+                }));
 
-                GameBoard.currntGameboard.repaintBord();
-            }));
-
+            }
 
             //string updateStr = "";
             //for (int row = 0; row < rows; row++)
@@ -488,6 +496,7 @@ namespace Client
      updateBoard = 420,
      gameResult =500,
      playAgain =600,
+     leaveRoom = 650,
      disconnect = 700
 
     }

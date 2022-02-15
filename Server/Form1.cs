@@ -245,6 +245,10 @@ namespace serverAppConnect4
                 {
                     currentRoom.RoomPlayers.RemoveAt(1);
                 }
+                foreach (var player in Allplayers)
+                {
+                    player.Bw.Write(getRooms());
+                }
             }
 
 
@@ -432,14 +436,20 @@ namespace serverAppConnect4
         //if the room owner wants to leave the room and go to the lobby again
         public static void leaveRoom(player player)
         {
-            room currentRoom = player.MyRoom;
-            player.MyRoom = null;
-            player.Score = 0;
-            currentRoom.RoomPlayers.Remove(player);
-            allRooms.Remove(currentRoom);
-            foreach (var p in Allplayers)
+            if (player.MyRoom != null && player.MyRoom.RoomPlayers.Count<2)
             {
-                p.Bw.Write(getRooms());
+                if (player.MyRoom.RoomPlayers[0].Name == player.Name)
+                {
+                    room currentRoom = player.MyRoom;
+                    player.MyRoom = null;
+                    player.Score = 0;
+                    currentRoom.RoomPlayers.Remove(player);
+                    allRooms.Remove(currentRoom);
+                    foreach (var p in Allplayers)
+                    {
+                        p.Bw.Write(getRooms());
+                    }
+                }
             }
         }
         //when the player wants to logout of the game

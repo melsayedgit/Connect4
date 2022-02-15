@@ -27,7 +27,7 @@ namespace Client
         //4)
 
         //
-        string player;
+        public string player;
         //5)
 
         //SolidBrush player1;
@@ -65,7 +65,6 @@ namespace Client
             ChallangerBrush = new SolidBrush(ChallangerColor);
             currntGameboard = this;
         }
-
         public void repaintBord()
         {
             Graphics g = this.CreateGraphics();
@@ -301,6 +300,7 @@ namespace Client
         private void GameBoard_FormClosing(object sender, FormClosingEventArgs e)
         {
             lobby.mainlobby.Show();
+            GameManger.SendServerRequest(Flag.leaveRoom);
         }
 
 
