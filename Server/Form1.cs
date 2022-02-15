@@ -235,6 +235,8 @@ namespace serverAppConnect4
                 askingPlayer.Score = 0;
                 //remove this player from the room
                 currentRoom.RoomPlayers.Remove(askingPlayer);
+                //return the room turn to the owner if the challenger is kicked out
+                currentRoom.PlayerTurn = 1;
                 //remove all audience
                 int roomPlayersCount = currentRoom.RoomPlayers.Count;
                 for (int i = 1; i < roomPlayersCount; i++)
