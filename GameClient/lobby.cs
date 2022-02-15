@@ -224,7 +224,7 @@ namespace Client
                 GameBoard.ChallangerColor = Color.Purple;
                 GameBoard.turn = 1;
                 GameBoard.playerTurn = 1;
-
+                currentroom = new Room(Roomname_new, GameManger.CurrentPlayer);
                 board = new GameBoard();
                 wait = new waiting();
                 wait.msg = "Waiting for somone to join \n so you can Play :)";

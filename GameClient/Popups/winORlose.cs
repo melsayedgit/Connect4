@@ -49,24 +49,32 @@ namespace Client
         {
             if (result == -1)
             {
-                //(this.Parent as GameBoard).Close();
+                //if the player is spectator
+            
                 GameBoard.currntGameboard.Close();
-
+                DialogResult = DialogResult.Cancel;
+                //for (var i = 1; i < GameManger.playerslist.Count; i++)
+                //{
+                //    GameManger.playerslist.RemoveAt(i);
+                //}
             }
             else
             {
-                //check if the player is the spectator to remove from the list
-                for (var i = 1; i < GameManger.playerslist.Count; i++)
-                {
-                    GameManger.playerslist.RemoveAt(i);
-                }
+              
+                // is host or challanger
                 GameManger.SendServerRequest(Flag.playAgain, "0");
-                //Thread.Sleep(500);
-                if (GameManger.CurrentRoom.Host.Name != GameManger.CurrentPlayer.Name)//if the spectator close game board
+
+      
+                if (lobby.currentroom.Host.Name != GameManger.CurrentPlayer.Name)//if the challanger closed the game
                 {
                     GameBoard.currntGameboard.Close();
+                  
                 }
-                DialogResult = DialogResult.Cancel;
+                else
+                {
+                    DialogResult = DialogResult.Cancel;
+                }
+                
             }
         }
 
