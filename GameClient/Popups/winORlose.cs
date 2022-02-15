@@ -68,7 +68,7 @@ namespace Client
                 if (lobby.currentroom.Host.Name != GameManger.CurrentPlayer.Name)//if the challanger closed the game
                 {
                     GameBoard.currntGameboard.Close();
-                  
+                    DialogResult = DialogResult.Cancel;
                 }
                 else
                 {
