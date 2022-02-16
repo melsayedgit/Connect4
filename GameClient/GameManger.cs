@@ -395,7 +395,8 @@ namespace Client
             foreach (var item in data)
             {
                 var name = item.Split('+')[0];
-                players.Add(new Player(name));
+                bool isplaying =bool.Parse( item.Split('+')[1]);
+                players.Add(new Player(name, isplaying));
             }
             return players;
         }
@@ -457,13 +458,19 @@ namespace Client
     public class Player
     {
         public string Name { get;}
+        public bool isplaying { get; set; }
         public Color PlayerColor { get; set; }
 
-      public  Player(string name)
+      public  Player(string name, bool isPlaying)
       {
             Name = name;
-
-      }       
+            this.isplaying = isPlaying;
+      }
+        public Player(string name)
+        {
+            Name = name;
+            this.isplaying = isplaying;
+        }
     }
 
 

@@ -54,8 +54,10 @@ namespace Client
             {
                 playerlist[i] = new player();
                 playerlist[i].playername = GameManger.playerslist[i].Name;
+                playerlist[i].PlayerIsplaying = GameManger.playerslist[i].isplaying;
+                
                 flowLayoutPanel1.Controls.Add(playerlist[i]);
-         
+                
                 //if (flowLayoutPanel1.Controls.Count>0)
                 //{
                 //flowLayoutPanel1.Controls.Clear();

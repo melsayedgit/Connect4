@@ -154,6 +154,10 @@ namespace serverAppConnect4
             {
                 player.Bw.Write(getRooms());
             }
+            foreach (var player in Allplayers)
+            {
+                player.Bw.Write(getPlayer());
+            }
         }
 
         //joining the room
@@ -195,6 +199,10 @@ namespace serverAppConnect4
                 foreach (var player in Allplayers)
                 {
                     player.Bw.Write(getRooms());
+                }
+                foreach (var player in Allplayers)
+                {
+                    player.Bw.Write(getPlayer());
                 }
             }
             return retVal;
@@ -250,6 +258,10 @@ namespace serverAppConnect4
                 foreach (var player in Allplayers)
                 {
                     player.Bw.Write(getRooms());
+                }
+                foreach (var player in Allplayers)
+                {
+                    player.Bw.Write(getPlayer());
                 }
             }
 
@@ -450,6 +462,10 @@ namespace serverAppConnect4
                     foreach (var p in Allplayers)
                     {
                         p.Bw.Write(getRooms());
+                    }
+                    foreach (var p in Allplayers)
+                    {
+                        p.Bw.Write(getPlayer());
                     }
                 }
             }
