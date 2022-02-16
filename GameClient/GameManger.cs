@@ -331,7 +331,6 @@ namespace Client
                 {
 
                     lobby.seegamebaord.Close();
-                  MessageBox.Show("am dead");
                 }));
 
             }

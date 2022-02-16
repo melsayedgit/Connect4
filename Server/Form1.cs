@@ -239,8 +239,9 @@ namespace serverAppConnect4
                 askingPlayer.Bw.Write("405,0,0,0");
                 //remove the room refrence from the player
                 askingPlayer.MyRoom = null;
-                //restore the player's score to 0
+                //restore the player's score to 0 and is playing to false
                 askingPlayer.Score = 0;
+                askingPlayer.IsPlaying = false;
                 //remove this player from the room
                 currentRoom.RoomPlayers.Remove(askingPlayer);
                 //return the room turn to the owner if the challenger is kicked out
@@ -457,6 +458,7 @@ namespace serverAppConnect4
                     room currentRoom = player.MyRoom;
                     player.MyRoom = null;
                     player.Score = 0;
+                    player.IsPlaying = false;
                     currentRoom.RoomPlayers.Remove(player);
                     allRooms.Remove(currentRoom);
                     foreach (var p in Allplayers)
