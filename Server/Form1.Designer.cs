@@ -71,6 +71,7 @@ namespace serverAppConnect4
             this.fillList.TabIndex = 4;
             this.fillList.Text = "fill list";
             this.fillList.UseVisualStyleBackColor = true;
+            this.fillList.Visible = false;
             // 
             // timer1
             // 
