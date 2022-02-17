@@ -232,7 +232,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="conn4.ico" />
-    <Content Include="SoundEffects\Panda-Background.mp3" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="WMPLib">

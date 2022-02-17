@@ -18,10 +18,12 @@ namespace Client
 
         static Soundmanger()
         {
-            workingpath = Path.Combine(Directory.GetCurrentDirectory(), "SoundEffects");
-
+            string workingDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
+            workingpath = Path.Combine(projectDirectory, "SoundEffects");
+           
             BGPlayer = new WMPLib.WindowsMediaPlayer();
-            BGPlayer.URL = Path.Combine(workingpath, "Panda-Background.mp3");
+            BGPlayer.URL = Path.Combine(workingpath, "tigerbg.mp3");
             BGPlayer.settings.setMode("loop", true);
             BGPlayer.settings.volume = 10;
         }
