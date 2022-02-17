@@ -62,6 +62,7 @@ namespace serverAppConnect4
             add = new IPAddress(bt);
             server = new TcpListener(add, 2222);
             server.Start();
+            
             MessageBox.Show("server started");
 
             while (true)
@@ -440,8 +441,10 @@ namespace serverAppConnect4
         public static void saveGameToFile(room room)
         {
             //Player2 name “value”, Player2 name “value” date of the game
-            string path = @"C:\Users\Blu-Ray\OneDrive\Desktop\iti\visual C# .NET\project\scoreSheet.txt";
-
+           
+            
+            DirectoryInfo dir = new DirectoryInfo(".");
+            string path = @dir.FullName + "\\scoreSheet.txt";
             StreamWriter Sw = File.AppendText(path);
             Sw.WriteLine($"player1: {room.RoomPlayers[0].Name}, Score: {room.RoomPlayers[0].Score}, player2: {room.RoomPlayers[1].Name}, score: {room.RoomPlayers[1].Score}, Date: {DateTime.Now.ToString()}");
             Sw.Close();
