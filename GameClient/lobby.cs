@@ -96,7 +96,7 @@ namespace Client
 
         private void Button3_Click(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
 
         private void Button3_MouseEnter(object sender, EventArgs e)
@@ -267,6 +267,8 @@ namespace Client
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
+
 
 
 
