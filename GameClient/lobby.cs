@@ -15,6 +15,8 @@ namespace Client
 {
     public partial class lobby : Form
     {
+       
+
         public choosecolor join_game;
         public spectate join_spectate;
         public createRoom create_room;
@@ -34,6 +36,8 @@ namespace Client
         {
             InitializeComponent();
             mainlobby = this;
+
+            Soundmanger.BGPlayer.controls.play();
         }
         ~lobby()
         {
