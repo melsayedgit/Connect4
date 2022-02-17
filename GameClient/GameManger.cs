@@ -329,7 +329,11 @@ namespace Client
             {
                 lobby.mainlobby.Invoke(new MethodInvoker(delegate ()
                 {
-
+                    message ms = new message();
+                    ms.msg = "the owner has rejected you!";
+                    DialogResult res = ms.ShowDialog();
+                    lobby.currentroom = null;
+                    updateBoard
                     lobby.seegamebaord.Close();
                 }));
 
