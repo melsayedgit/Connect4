@@ -303,6 +303,9 @@ namespace Client
             GameManger.SendServerRequest(Flag.leaveRoom);
         }
 
+        private void GameBoard_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }

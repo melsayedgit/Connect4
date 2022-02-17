@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Popups;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,7 +26,9 @@ namespace Client
         {
             if (textBox1.Text=="")
             {
-                MessageBox.Show("you need to Enter a user Name to login");
+                message ms = new message();
+                ms.msg = "you need to Enter \n a user Name to login";
+                DialogResult res = ms.ShowDialog();
             }
             else
             {
@@ -44,8 +47,10 @@ namespace Client
 
                     catch (Exception)
                     {
-                        MessageBox.Show("The Server is Offline please try again later");
-
+                     
+                        message ms = new message();
+                        ms.msg = "The Server is Offline \n Please try again later";
+                        DialogResult res = ms.ShowDialog();
                     }
                     try
                     {
@@ -94,7 +99,9 @@ namespace Client
             {
                 if (textBox1.Text == "")
                 {
-                    MessageBox.Show("you need to Enter a user Name to login");
+                    message ms = new message();
+                    ms.msg = "You need to Enter \n a user Name to login";
+                    DialogResult res = ms.ShowDialog();
                 }
                 else
                 {
@@ -113,7 +120,9 @@ namespace Client
 
                         catch (Exception)
                         {
-                            MessageBox.Show("The Server is Offline please try again later");
+                            message ms = new message();
+                            ms.msg = "The Server is Offline \n Please try again later";
+                            DialogResult res = ms.ShowDialog();
 
                         }
                         try

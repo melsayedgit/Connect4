@@ -153,52 +153,60 @@ namespace Client
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            var cons = flowLayoutPanel2.Controls;
-            var selected = from RoomControl con in cons
-                           where con.BackColor == Color.Silver
-                           select con.TabIndex;
-            currentroom = GameManger.Rommslist[selected.ElementAt(0)];
-            if (selected.Count() == 0) //no room selected
+            try
+            {
+                var cons = flowLayoutPanel2.Controls;
+                var selected = from RoomControl con in cons
+                               where con.BackColor == Color.Silver
+                               select con.TabIndex;
+                currentroom = GameManger.Rommslist[selected.ElementAt(0)];
+                if (selected.Count() == 0) //no room selected
+                {
+                    message ms = new message();
+                    ms.msg = "please select a room before \n joining";
+                    DialogResult res = ms.ShowDialog();
+
+                }
+                else
+                {
+                    if (GameManger.Rommslist[selected.ElementAt(0)].challenger == null)//&& !GameManger.Rommslist[selected.ElementAt(0)].occupied  
+                    {
+                        GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
+                        join_game = new choosecolor();
+                        var dg = join_game.ShowDialog();
+                        if (dg == DialogResult.OK)
+                        {
+                            GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.Name, GameManger.CurrentPlayer.PlayerColor.ToArgb().ToString());
+                            wait = new waiting();
+                            wait.Show();
+
+                        }
+                        //GameManger.Rommslist[selected.ElementAt(0)].occupied = true;
+                    }
+                    else
+                    {
+                        //GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
+                        //MessageBox.Show(selected.ElementAt(0).ToString() + "you are inspectator");
+                        join_spectate = new spectate();
+                        var dg = join_spectate.ShowDialog();
+
+                        if (dg == DialogResult.OK)
+                        {
+                            GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
+
+                        }
+                    }
+
+
+
+                }
+            }
+            catch
             {
                 message ms = new message();
                 ms.msg = "please select a room before \n joining";
                 DialogResult res = ms.ShowDialog();
-
             }
-            else
-            {
-                if (GameManger.Rommslist[selected.ElementAt(0)].challenger == null)//&& !GameManger.Rommslist[selected.ElementAt(0)].occupied  
-                {
-                    GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
-                    join_game = new choosecolor();
-                    var dg = join_game.ShowDialog();
-                    if (dg == DialogResult.OK)
-                    {
-                        GameManger.SendServerRequest(Flag.asktoplay, GameManger.CurrentPlayer.Name ,GameManger.CurrentPlayer.PlayerColor.ToArgb().ToString());
-                         wait = new waiting();
-                        wait.Show();
-
-                    }
-                    //GameManger.Rommslist[selected.ElementAt(0)].occupied = true;
-                }
-                else
-                {
-                    //GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
-                    //MessageBox.Show(selected.ElementAt(0).ToString() + "you are inspectator");
-                    join_spectate = new spectate();
-                    var dg = join_spectate.ShowDialog();
-                
-                    if (dg == DialogResult.OK)
-                    {
-                        GameManger.SendServerRequest(Flag.joinRoom, GameManger.Rommslist[selected.ElementAt(0)].Name);
-
-                    }
-                }
-
-
-
-            }
-
             
 
         }

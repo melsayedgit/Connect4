@@ -29,6 +29,7 @@ namespace Client.Popups
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(acceptTheChallenger));
             this.okBtn = new System.Windows.Forms.Button();
             this.cancelBtn = new System.Windows.Forms.Button();
             this.challengerName = new System.Windows.Forms.Label();
@@ -101,6 +102,7 @@ namespace Client.Popups
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.okBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "acceptTheChallenger";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

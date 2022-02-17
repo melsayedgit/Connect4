@@ -47,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>conn4.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DragAssembly">
       <HintPath>C:\Users\ibrah\Downloads\DragAssembly.dll</HintPath>
@@ -225,6 +228,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\watch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="conn4.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

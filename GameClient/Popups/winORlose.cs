@@ -62,16 +62,21 @@ namespace Client
             {
               
                 // is host or challanger
-                GameManger.SendServerRequest(Flag.playAgain, "0");
-
+           
       
                 if (lobby.currentroom.Host.Name != GameManger.CurrentPlayer.Name)//if the challanger closed the game
                 {
+                    GameManger.SendServerRequest(Flag.playAgain, "0");
+
                     GameBoard.currntGameboard.Close();
                     DialogResult = DialogResult.Cancel;
                 }
                 else
                 {
+                    lobby.wait = new waiting();
+                    lobby.wait.msg = "Waiting for somone to join \n so you can Play :)";
+                    lobby.wait.Show();
+                    GameManger.SendServerRequest(Flag.playAgain, "0");
                     DialogResult = DialogResult.Cancel;
                 }
                 
