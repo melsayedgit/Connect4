@@ -333,7 +333,8 @@ namespace Client
                     ms.msg = "the owner has rejected you!";
                     DialogResult res = ms.ShowDialog();
                     lobby.currentroom = null;
-                    updateBoard
+                    
+
                     lobby.seegamebaord.Close();
                 }));
 

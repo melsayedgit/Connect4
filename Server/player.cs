@@ -12,6 +12,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.IO;
 
+
 namespace serverAppConnect4
 {
     public class player
