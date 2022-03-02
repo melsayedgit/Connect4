@@ -68,16 +68,7 @@ namespace Client
                         }
 
 
-                        else
-                        {
-                            GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
-                            if (GameManger.isloginSuc(playername))
-                            {
-                                start_lobby = new lobby();
-                                start_lobby.Show();
-                                this.Hide();
-                            }
-                        }
+
                     }
                     catch (Exception)
                     {
@@ -87,7 +78,27 @@ namespace Client
 
 
                 }
- 
+
+                else
+                {
+                    GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
+                    if (GameManger.isloginSuc(playername))
+                    {
+                        start_lobby = new lobby();
+                        start_lobby.Text += "- " + playername;
+                        GameManger.recieve = new Task(GameManger.ReceiveServerRequest);
+                        GameManger.recieve.Start();
+                        GameManger.SendServerRequest(Flag.getPlayers);
+                        GameManger.SendServerRequest(Flag.getRooms);
+
+                        start_lobby.Show();
+                        this.Hide();
+
+                        //start_lobby = new lobby();
+                        //start_lobby.Show();
+                        //this.Hide();
+                    }
+                }
             }
 
             
@@ -100,7 +111,7 @@ namespace Client
                 if (textBox1.Text == "")
                 {
                     message ms = new message();
-                    ms.msg = "You need to Enter \n a user Name to login";
+                    ms.msg = "you need to Enter \n a user Name to login";
                     DialogResult res = ms.ShowDialog();
                 }
                 else
@@ -120,10 +131,10 @@ namespace Client
 
                         catch (Exception)
                         {
+
                             message ms = new message();
                             ms.msg = "The Server is Offline \n Please try again later";
                             DialogResult res = ms.ShowDialog();
-
                         }
                         try
                         {
@@ -141,16 +152,7 @@ namespace Client
                             }
 
 
-                            else
-                            {
-                                GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
-                                if (GameManger.isloginSuc(playername))
-                                {
-                                    start_lobby = new lobby();
-                                    start_lobby.Show();
-                                    this.Hide();
-                                }
-                            }
+
                         }
                         catch (Exception)
                         {
@@ -161,8 +163,27 @@ namespace Client
 
                     }
 
-                }
+                    else
+                    {
+                        GameManger.SendServerRequest(Flag.sendLoginInfo, playername);
+                        if (GameManger.isloginSuc(playername))
+                        {
+                            start_lobby = new lobby();
+                            start_lobby.Text += "- " + playername;
+                            GameManger.recieve = new Task(GameManger.ReceiveServerRequest);
+                            GameManger.recieve.Start();
+                            GameManger.SendServerRequest(Flag.getPlayers);
+                            GameManger.SendServerRequest(Flag.getRooms);
 
+                            start_lobby.Show();
+                            this.Hide();
+
+                            //start_lobby = new lobby();
+                            //start_lobby.Show();
+                            //this.Hide();
+                        }
+                    }
+                }
 
             }
         }
