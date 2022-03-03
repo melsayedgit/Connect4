@@ -100,7 +100,10 @@ namespace Client
 
         private void Button3_Click(object sender, EventArgs e)
         {
+            GameManger.SendServerRequest(Flag.disconnect, "");
+            GameManger.recieve.Wait(1000);
             Application.Exit();
+
         }
 
         private void Button3_MouseEnter(object sender, EventArgs e)
