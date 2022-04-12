@@ -44,7 +44,7 @@ namespace Client
         static GameManger()
            
         {
-            ip = "172.16.14.37";
+            ip = "127.0.0.1";
             port = 2222;
             connStatues = false;
             ServerIP =  IPAddress.Parse(ip);
